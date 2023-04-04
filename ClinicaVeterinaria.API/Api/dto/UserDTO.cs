@@ -1,6 +1,6 @@
 ﻿namespace ClinicaVeterinaria.API.Api.dto
 {
-    internal class UserDTO
+    public class UserDTO
     {
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -22,7 +22,7 @@
         }
     }
 
-    internal class UserDTOlogin
+    public class UserDTOlogin
     {
         public string Email { get; set; }
         public string Password { get; set; }
@@ -38,7 +38,7 @@
         }
     }
 
-    internal class UserDTOregister
+    public class UserDTOregister
     {
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -66,7 +66,7 @@
         }
     }
 
-    internal class UserDTOshort
+    public class UserDTOshort
     {
         public string Name { get; set; }
         public string Surname { get; set; }

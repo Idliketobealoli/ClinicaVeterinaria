@@ -1,15 +1,23 @@
-namespace ClinicaVeterinaria.API.Api.model;
-
-public class History
+namespace ClinicaVeterinaria.API.Api.model
 {
-    public History(HashSet<Vaccine> vaccines, Dictionary<string, string> ailmentTreatment)
+    public class History
     {
-        PetId = Guid.NewGuid();
-        Vaccines = vaccines;
-        this.ailmentTreatment = ailmentTreatment;
-    }
+        public History
+            (
+            Guid petId
+            )
+        {
+            Id = Guid.NewGuid();
+            PetId = petId;
+            Vaccines = new HashSet<Vaccine>();
+            AilmentTreatment = new Dictionary<string,string>();
+        }
 
-    public Guid PetId { get; set; }
-    public HashSet<Vaccine> Vaccines { get; set; }
-    public Dictionary<string, string> ailmentTreatment { get; set; }
+        public Guid Id { get; set; }
+        public Guid PetId { get; set; }
+        [GraphQLNonNullType]
+        public HashSet<Vaccine> Vaccines { get; set; }
+        [GraphQLNonNullType]
+        public Dictionary<string, string> AilmentTreatment { get; set; }
+    }
 }

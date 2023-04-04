@@ -1,13 +1,20 @@
-namespace ClinicaVeterinaria.API.Api.model;
-
-public class Vaccine
+namespace ClinicaVeterinaria.API.Api.model
 {
-    public Vaccine(string name, DateOnly date)
+    public class Vaccine
     {
-        Name = name;
-        Date = date;
+        public Vaccine() { }
+        public Vaccine(Guid petId, string name, DateOnly date)
+        {
+            Id = Guid.NewGuid();
+            PetId = petId;
+            Name = name;
+            Date = date;
+        }
+        public Guid Id { get; set; }
+        public Guid PetId { get; set; }
+        [GraphQLNonNullType]
+        public string Name { get; set; }
+        [GraphQLNonNullType]
+        public DateOnly Date { get; set; }
     }
-
-    public string Name { get; set; }
-    public DateOnly Date { get; set; }
 }

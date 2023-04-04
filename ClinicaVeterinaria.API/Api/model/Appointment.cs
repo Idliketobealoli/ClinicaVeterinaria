@@ -1,21 +1,12 @@
 ﻿namespace ClinicaVeterinaria.API.Api.model
 {
-    internal class Appointment
+    public class Appointment
     {
-        public Guid Id { get; set; }
-        public string UserEmail { get; set; }
-        public DateTime InitialDate { get; set; }
-        public DateTime FinishDate { get; set; }
-        public Guid PetId { get; set; }
-        public string Issue { get; set; }
-        public State State { get; set; }
-        public string VetEmail { get; set; }
-
         public Appointment
             (
             string userEmail,
-            DateTime initial,
-            DateTime finish,
+            DateTime initialDate,
+            DateTime finishDate,
             Guid petId,
             string issue,
             string vetEmail
@@ -23,16 +14,33 @@
         {
             Id = Guid.NewGuid();
             UserEmail = userEmail;
-            InitialDate = initial;
-            FinishDate = finish;
+            InitialDate = initialDate;
+            FinishDate = finishDate;
             PetId = petId;
             Issue = issue;
             State = State.PENDING;
             VetEmail = vetEmail;
         }
+
+        [GraphQLNonNullType]
+        public Guid Id { get; set; }
+        [GraphQLNonNullType]
+        public string UserEmail { get; set; }
+        [GraphQLNonNullType]
+        public DateTime InitialDate { get; set; }
+        [GraphQLNonNullType]
+        public DateTime FinishDate { get; set; }
+        [GraphQLNonNullType]
+        public Guid PetId { get; set; }
+        [GraphQLNonNullType]
+        public string Issue { get; set; }
+        [GraphQLNonNullType]
+        public State State { get; set; }
+        [GraphQLNonNullType]
+        public string VetEmail { get; set; }
     }
 
-    enum State
+    public enum State
     {
         PENDING,
         PROGRESS,

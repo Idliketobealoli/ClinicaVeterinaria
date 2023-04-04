@@ -1,22 +1,13 @@
 ﻿namespace ClinicaVeterinaria.API.Api.model
 {
-    internal class Vet
+    public class Vet
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Email { get; set; }
-        public string SSNumber { get; set; }
-        public string Password { get; set; }
-        public Role Role { get; set; }
-        public string Specialty { get; set; }
-
         public Vet
             (
             string name,
             string surname,
             string email,
-            string ssnum,
+            string sSNumber,
             string password,
             Role role,
             string specialty
@@ -26,14 +17,31 @@
             Name = name;
             Surname = surname;
             Email = email;
-            SSNumber = ssnum;
+            SSNumber = sSNumber;
             Password = password;
             Role = role;
             Specialty = specialty;
         }
+
+        [GraphQLNonNullType]
+        public Guid Id { get; set; }
+        [GraphQLNonNullType]
+        public string Name { get; set; }
+        [GraphQLNonNullType]
+        public string Surname { get; set; }
+        [GraphQLNonNullType]
+        public string Email { get; set; }
+        [GraphQLNonNullType]
+        public string SSNumber { get; set; }
+        [GraphQLNonNullType]
+        public string Password { get; set; }
+        [GraphQLNonNullType]
+        public Role Role { get; set; }
+        [GraphQLNonNullType]
+        public string Specialty { get; set; }
     }
 
-    enum Role
+    public enum Role
     {
         VET,
         ADMIN

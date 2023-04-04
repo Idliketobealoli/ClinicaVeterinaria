@@ -2,7 +2,7 @@
 
 namespace ClinicaVeterinaria.API.Api.dto
 {
-    internal class AppointmentDTO
+    public class AppointmentDTO
     {
         public UserDTOshort User { get; set; }
         public DateTime InitialDate { get; set; }
@@ -13,7 +13,7 @@ namespace ClinicaVeterinaria.API.Api.dto
         public VetDTOshort Vet { get; set; }
 
         public AppointmentDTO
-        (
+            (
             UserDTOshort user,
             DateTime initial,
             DateTime finish,
@@ -21,7 +21,7 @@ namespace ClinicaVeterinaria.API.Api.dto
             string issue,
             State state,
             VetDTOshort vet
-        )
+            )
         {
             User = user;
             InitialDate = initial;
@@ -33,16 +33,16 @@ namespace ClinicaVeterinaria.API.Api.dto
         }
     }
 
-    internal class AppointmentDTOshort
+    public class AppointmentDTOshort
     {
         public DateTime InitialDate { get; set; }
         public PetNoPhotoDTO Pet { get; set; }
 
         public AppointmentDTOshort
-        (
+            (
             DateTime initial,
             PetNoPhotoDTO pet
-        )
+            )
         {
             InitialDate = initial;
             Pet = pet;

@@ -2,7 +2,7 @@
 
 namespace ClinicaVeterinaria.API.Api.dto
 {
-    internal class VetDTO
+    public class VetDTO
     {
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -30,7 +30,7 @@ namespace ClinicaVeterinaria.API.Api.dto
         }
     }
 
-    internal class VetDTOappointment
+    public class VetDTOappointment
     {
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -49,7 +49,7 @@ namespace ClinicaVeterinaria.API.Api.dto
         }
     }
 
-    internal class VetDTOlogin
+    public class VetDTOlogin
     {
         public string Email { get; set; }
         public string Password { get; set; }
@@ -64,7 +64,7 @@ namespace ClinicaVeterinaria.API.Api.dto
         }
     }
 
-    internal class VetDTOregister
+    public class VetDTOregister
     {
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -98,7 +98,7 @@ namespace ClinicaVeterinaria.API.Api.dto
         }
     }
 
-    internal class VetDTOshort
+    public class VetDTOshort
     {
         public string Name { get; set; }
         public string Surname { get; set; }

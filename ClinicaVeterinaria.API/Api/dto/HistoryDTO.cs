@@ -1,35 +1,36 @@
 using ClinicaVeterinaria.API.Api.model;
 
-namespace ClinicaVeterinaria.API.Api.dto;
-
-internal class HistoryFindAllDTO
+namespace ClinicaVeterinaria.API.Api.dto
 {
-    public HistoryFindAllDTO(HashSet<Vaccine> vaccines, Dictionary<string, string> ailmentTreatment)
+    public class HistoryFindAllDTO
     {
-        Vaccines = vaccines;
-        this.ailmentTreatment = ailmentTreatment;
+        public HistoryFindAllDTO(HashSet<Vaccine> vaccines, Dictionary<string, string> ailmentTreatment)
+        {
+            Vaccines = vaccines;
+            AilmentTreatment = ailmentTreatment;
+        }
+
+        public HashSet<Vaccine> Vaccines { get; set; }
+        public Dictionary<string, string> AilmentTreatment { get; set; }
     }
 
-    public HashSet<Vaccine> Vaccines { get; set; }
-    public Dictionary<string, string> ailmentTreatment { get; set; }
-}
-
-internal class HistoryVaccinesDTO
-{
-    public HistoryVaccinesDTO(HashSet<Vaccine> vaccines)
+    public class HistoryVaccinesDTO
     {
-        Vaccines = vaccines;
+        public HistoryVaccinesDTO(HashSet<Vaccine> vaccines)
+        {
+            Vaccines = vaccines;
+        }
+
+        public HashSet<Vaccine> Vaccines { get; set; }
     }
 
-    public HashSet<Vaccine> Vaccines { get; set; }
-}
-
-internal class HistoryAilmentTreatmentDTO
-{
-    public HistoryAilmentTreatmentDTO(Dictionary<string, string> ailmentTreatment)
+    public class HistoryAilmentTreatmentDTO
     {
-        this.ailmentTreatment = ailmentTreatment;
-    }
+        public HistoryAilmentTreatmentDTO(Dictionary<string, string> ailmentTreatment)
+        {
+            AilmentTreatment = ailmentTreatment;
+        }
 
-    public Dictionary<string, string> ailmentTreatment { get; set; }
+        public Dictionary<string, string> AilmentTreatment { get; set; }
+    }
 }
