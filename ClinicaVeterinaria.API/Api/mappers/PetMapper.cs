@@ -17,6 +17,7 @@ namespace ClinicaVeterinaria.API.Api.mappers
                 );
         }
 
+        /*
         public static PetIdDTO ToFindOneDTO(this Pet pet)
         {
             return new
@@ -33,5 +34,6 @@ namespace ClinicaVeterinaria.API.Api.mappers
                 // owner
                 );
         }
+        */
     }
 }

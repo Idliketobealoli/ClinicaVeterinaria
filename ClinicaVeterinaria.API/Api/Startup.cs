@@ -1,4 +1,4 @@
-﻿using ClinicaVeterinaria.API.Schema;
+﻿using ClinicaVeterinaria.API.Api.Schema;
 
 namespace ClinicaVeterinaria.API
 {

@@ -1,4 +1,4 @@
-﻿namespace ClinicaVeterinaria.API.Schema
+﻿namespace ClinicaVeterinaria.API.Api.Schema
 {
     public class Query
     {

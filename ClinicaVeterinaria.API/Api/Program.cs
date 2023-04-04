@@ -1,4 +1,4 @@
-namespace ClinicaVeterinaria.API
+namespace ClinicaVeterinaria.API.Api
 {
     public class Program
     {
