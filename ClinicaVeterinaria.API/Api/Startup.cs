@@ -1,4 +1,5 @@
 ﻿using ClinicaVeterinaria.API.Api.db;
+using ClinicaVeterinaria.API.Api.repositories;
 using ClinicaVeterinaria.API.Api.Schema;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +20,13 @@ namespace ClinicaVeterinaria.API
 
             string? connectionString = _configuration.GetConnectionString("default_connection");
             services.AddPooledDbContextFactory<ClinicaDBContext>(o => o.UseNpgsql(connectionString));
+
+            services.AddSingleton<UserRepository>();
+            services.AddSingleton<VetRepository>();
+            services.AddSingleton<AppointmentRepository>();
+            services.AddSingleton<HistoryRepository>();
+            services.AddSingleton<VaccineRepository>();
+            services.AddSingleton<PetRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

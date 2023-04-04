@@ -4,62 +4,62 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClinicaVeterinaria.API.Api.repositories
 {
-    public class UserRepository
+    public class PetRepository
     {
         private readonly IDbContextFactory<ClinicaDBContext> ContextFactory;
 
-        public UserRepository(IDbContextFactory<ClinicaDBContext> contextFactory)
+        public PetRepository(IDbContextFactory<ClinicaDBContext> contextFactory)
         {
             ContextFactory = contextFactory;
         }
 
-        public async Task<List<User>> FindAll()
+        public async Task<List<Pet>> FindAll()
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            var users = await context.Users.ToListAsync();
-            return users ?? new();
+            var pets = await context.Pets.ToListAsync();
+            return pets ?? new();
         }
 
-        public async Task<User?> FindById(Guid id)
+        public async Task<Pet?> FindById(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            return await context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            return await context.Pets.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<User> Create(User user)
+        public async Task<Pet> Create(Pet pet)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            context.Users.Add(user);
+            context.Pets.Add(pet);
             await context.SaveChangesAsync();
 
-            return user;
+            return pet;
         }
 
-        public async Task<User?> Update(Guid id, User user)
+        public async Task<Pet?> Update(Guid id, Pet pet)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            var found = context.Users.FirstOrDefault(u => u.Id == id);
+            var found = context.Pets.FirstOrDefault(u => u.Id == id);
             if (found != null)
             {
-                user.Id = found.Id;
-                context.Users.Update(user);
+                pet.Id = found.Id;
+                context.Pets.Update(pet);
                 await context.SaveChangesAsync();
 
-                return user;
+                return pet;
             }
             return null;
         }
 
-        public async Task<User?> Delete(Guid id)
+        public async Task<Pet?> Delete(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            var foundUser = context.Users.FirstOrDefault(u => u.Id == id);
-            if (foundUser != null)
+            var found = context.Pets.FirstOrDefault(u => u.Id == id);
+            if (found != null)
             {
-                context.Users.Remove(foundUser);
+                context.Pets.Remove(found);
                 await context.SaveChangesAsync();
 
-                return foundUser;
+                return found;
             }
             return null;
         }

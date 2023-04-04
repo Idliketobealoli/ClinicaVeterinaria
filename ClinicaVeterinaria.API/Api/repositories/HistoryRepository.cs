@@ -4,62 +4,62 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClinicaVeterinaria.API.Api.repositories
 {
-    public class UserRepository
+    public class HistoryRepository
     {
         private readonly IDbContextFactory<ClinicaDBContext> ContextFactory;
 
-        public UserRepository(IDbContextFactory<ClinicaDBContext> contextFactory)
+        public HistoryRepository(IDbContextFactory<ClinicaDBContext> contextFactory)
         {
             ContextFactory = contextFactory;
         }
 
-        public async Task<List<User>> FindAll()
+        public async Task<List<History>> FindAll()
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            var users = await context.Users.ToListAsync();
-            return users ?? new();
+            var histories = await context.Histories.ToListAsync();
+            return histories ?? new();
         }
 
-        public async Task<User?> FindById(Guid id)
+        public async Task<History?> FindById(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            return await context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            return await context.Histories.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<User> Create(User user)
+        public async Task<History> Create(History history)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            context.Users.Add(user);
+            context.Histories.Add(history);
             await context.SaveChangesAsync();
 
-            return user;
+            return history;
         }
 
-        public async Task<User?> Update(Guid id, User user)
+        public async Task<History?> Update(Guid id, History history)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            var found = context.Users.FirstOrDefault(u => u.Id == id);
+            var found = context.Histories.FirstOrDefault(u => u.Id == id);
             if (found != null)
             {
-                user.Id = found.Id;
-                context.Users.Update(user);
+                history.Id = found.Id;
+                context.Histories.Update(history);
                 await context.SaveChangesAsync();
 
-                return user;
+                return history;
             }
             return null;
         }
 
-        public async Task<User?> Delete(Guid id)
+        public async Task<History?> Delete(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            var foundUser = context.Users.FirstOrDefault(u => u.Id == id);
-            if (foundUser != null)
+            var found = context.Histories.FirstOrDefault(u => u.Id == id);
+            if (found != null)
             {
-                context.Users.Remove(foundUser);
+                context.Histories.Remove(found);
                 await context.SaveChangesAsync();
 
-                return foundUser;
+                return found;
             }
             return null;
         }
