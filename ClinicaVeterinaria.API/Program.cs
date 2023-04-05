@@ -1,7 +1,7 @@
 using ClinicaVeterinaria.API.Api.db;
 using Microsoft.EntityFrameworkCore;
 
-namespace ClinicaVeterinaria.API.Api
+namespace ClinicaVeterinaria.API
 {
     public class Program
     {
@@ -9,17 +9,14 @@ namespace ClinicaVeterinaria.API.Api
         {
             IHost host = CreateHostBuilder(args).Build();
 
-            using(IServiceScope scope = host.Services.CreateScope())
+            using (IServiceScope scope = host.Services.CreateScope())
             {
                 IDbContextFactory<ClinicaDBContext> contextFactory =
                     scope.ServiceProvider.GetRequiredService<IDbContextFactory<ClinicaDBContext>>();
 
-                using(ClinicaDBContext context = contextFactory.CreateDbContext())
-                {
-                    context.Database.Migrate();
-                }
+                using ClinicaDBContext context = contextFactory.CreateDbContext();
+                context.Database.Migrate();
             }
-            host.Services.GetRequiredService<ClinicaDBContext>();
             host.Run();
         }
 

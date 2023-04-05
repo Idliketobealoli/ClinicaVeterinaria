@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ClinicaVeterinaria.API.Migrations
 {
     [DbContext(typeof(ClinicaDBContext))]
-    [Migration("20230404164555_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230405175517_MainMigration")]
+    partial class MainMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

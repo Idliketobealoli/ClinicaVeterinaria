@@ -16,7 +16,8 @@ namespace ClinicaVeterinaria.API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddGraphQLServer().AddQueryType<Query>();
+            services.AddGraphQLServer()
+                .AddQueryType<Query>();
 
             string? connectionString = _configuration.GetConnectionString("default_connection");
             services.AddPooledDbContextFactory<ClinicaDBContext>(o => o.UseNpgsql(connectionString));
