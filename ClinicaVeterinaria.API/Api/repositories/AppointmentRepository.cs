@@ -35,21 +35,6 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return appointment;
         }
 
-        public async Task<Appointment?> Update(Guid id, Appointment appointment)
-        {
-            using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            var found = context.Appointments.FirstOrDefault(u => u.Id == id);
-            if (found != null)
-            {
-                appointment.Id = found.Id;
-                context.Appointments.Update(appointment);
-                await context.SaveChangesAsync();
-
-                return appointment;
-            }
-            return null;
-        }
-
         public async Task<Appointment?> Delete(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();

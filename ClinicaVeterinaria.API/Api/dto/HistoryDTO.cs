@@ -1,32 +1,37 @@
-using ClinicaVeterinaria.API.Api.model;
-
 namespace ClinicaVeterinaria.API.Api.dto
 {
-    public class HistoryFindAllDTO
+    public class HistoryDTO
     {
-        public HistoryFindAllDTO(HashSet<Vaccine> vaccines, Dictionary<string, string> ailmentTreatment)
+        public HistoryDTO
+            (
+            Guid petId,
+            HashSet<VaccineDTO> vaccines,
+            Dictionary<string, string> ailmentTreatment
+            )
         {
+            PetId = petId;
             Vaccines = vaccines;
             AilmentTreatment = ailmentTreatment;
         }
 
-        public HashSet<Vaccine> Vaccines { get; set; }
+        public Guid PetId { get; set; }
+        public HashSet<VaccineDTO> Vaccines { get; set; }
         public Dictionary<string, string> AilmentTreatment { get; set; }
     }
 
-    public class HistoryVaccinesDTO
+    public class HistoryDTOvaccines
     {
-        public HistoryVaccinesDTO(HashSet<Vaccine> vaccines)
+        public HistoryDTOvaccines(HashSet<VaccineDTO> vaccines)
         {
             Vaccines = vaccines;
         }
 
-        public HashSet<Vaccine> Vaccines { get; set; }
+        public HashSet<VaccineDTO> Vaccines { get; set; }
     }
 
-    public class HistoryAilmentTreatmentDTO
+    public class HistoryDTOailmentTreatment
     {
-        public HistoryAilmentTreatmentDTO(Dictionary<string, string> ailmentTreatment)
+        public HistoryDTOailmentTreatment(Dictionary<string, string> ailmentTreatment)
         {
             AilmentTreatment = ailmentTreatment;
         }

@@ -36,5 +36,28 @@ namespace ClinicaVeterinaria.API.Api.mappers
                 vet.Email
                 );
         }
+
+        public static Vet FromDTOregister(this VetDTOregister dto)
+        {
+            return new
+                (
+                dto.Name,
+                dto.Surname,
+                dto.Email,
+                dto.SSNumber,
+                dto.Password,
+                dto.Role,
+                dto.Specialty
+                );
+        }
+
+        public static VetDTOandToken ToDTOwithToken(this Vet vet)
+        {
+            return new
+                (
+                vet.ToDTO(),
+                "token" // esto habrá que modificarlo cuando metamos tokens
+                );
+        }
     }
 }

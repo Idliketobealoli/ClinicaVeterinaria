@@ -1,0 +1,18 @@
+version: '3.4'
+
+services:
+    postgresql-database-dev:
+        container_name: "database_clinica-dev"
+        image: postgres:14.1-alpine
+        restart: always
+        environment:
+            - POSTGRES_USER=admin
+            - POSTGRES_PASSWORD=MiGataSeLlamaGata
+            - POSTGRES_DB=ClinicaVeterinariaTFG
+        ports:
+            - '5432:5432'
+        volumes:
+            - database_clinica-dev:/var/lib/postgresql/data
+
+volumes:
+    database_clinica-dev:

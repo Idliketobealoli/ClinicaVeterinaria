@@ -22,12 +22,12 @@
         }
     }
 
-    public class UserDTOlogin
+    public class UserDTOloginOrChangePassword
     {
         public string Email { get; set; }
         public string Password { get; set; }
 
-        public UserDTOlogin
+        public UserDTOloginOrChangePassword
             (
             string email,
             string password
@@ -81,4 +81,16 @@
             Surname = surname;
         }
     }
-}
+
+    public class UserDTOandToken
+    {
+        public UserDTO DTO { get; set; }
+        public string token { get; set; }
+
+        public UserDTOandToken(UserDTO dTO, string token)
+        {
+            DTO = dTO;
+            this.token = token;
+        }
+    }
+ }

@@ -26,6 +26,12 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return await context.Histories.FirstOrDefaultAsync(u => u.Id == id);
         }
 
+        public async Task<History?> FindByPetId(Guid id)
+        {
+            using ClinicaDBContext context = ContextFactory.CreateDbContext();
+            return await context.Histories.FirstOrDefaultAsync(u => u.PetId == id);
+        }
+
         public async Task<History> Create(History history)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();

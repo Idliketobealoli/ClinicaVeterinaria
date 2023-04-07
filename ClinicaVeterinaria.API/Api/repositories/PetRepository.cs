@@ -1,4 +1,5 @@
 ﻿using ClinicaVeterinaria.API.Api.db;
+using ClinicaVeterinaria.API.Api.dto;
 using ClinicaVeterinaria.API.Api.model;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,17 +36,23 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return pet;
         }
 
-        public async Task<Pet?> Update(Guid id, Pet pet)
+        public async Task<Pet?> Update(PetDTOupdate pet)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            var found = context.Pets.FirstOrDefault(u => u.Id == id);
+            var found = context.Pets.FirstOrDefault(u => u.Id == pet.Id);
             if (found != null)
             {
-                pet.Id = found.Id;
-                context.Pets.Update(pet);
+                found.Name = pet.Name;
+                found.Weight = pet.Weight;
+                found.Size = pet.Size;
+                if (pet.Photo != null)
+                {
+                    found.Photo = pet.Photo;
+                }
+                context.Pets.Update(found);
                 await context.SaveChangesAsync();
 
-                return pet;
+                return found;
             }
             return null;
         }

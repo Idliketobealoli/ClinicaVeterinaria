@@ -26,6 +26,18 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return await context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
+        public async Task<User?> FindByEmail(string email)
+        {
+            using ClinicaDBContext context = ContextFactory.CreateDbContext();
+            return await context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<User?> FindByPhone(string phone)
+        {
+            using ClinicaDBContext context = ContextFactory.CreateDbContext();
+            return await context.Users.FirstOrDefaultAsync(u => u.Phone == phone);
+        }
+
         public async Task<User> Create(User user)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
@@ -35,25 +47,25 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return user;
         }
 
-        public async Task<User?> Update(Guid id, User user)
+        public async Task<User?> UpdatePassword(string email, string newPassword)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            var found = context.Users.FirstOrDefault(u => u.Id == id);
+            var found = context.Users.FirstOrDefault(u => u.Email == email);
             if (found != null)
             {
-                user.Id = found.Id;
-                context.Users.Update(user);
+                found.Password = newPassword;
+                context.Users.Update(found);
                 await context.SaveChangesAsync();
 
-                return user;
+                return found;
             }
             return null;
         }
 
-        public async Task<User?> Delete(Guid id)
+        public async Task<User?> Delete(string email)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            var foundUser = context.Users.FirstOrDefault(u => u.Id == id);
+            var foundUser = context.Users.FirstOrDefault(u => u.Email == email);
             if (foundUser != null)
             {
                 context.Users.Remove(foundUser);

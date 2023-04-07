@@ -49,11 +49,11 @@ namespace ClinicaVeterinaria.API.Api.dto
         }
     }
 
-    public class VetDTOlogin
+    public class VetDTOloginOrChangePassword
     {
         public string Email { get; set; }
         public string Password { get; set; }
-        public VetDTOlogin
+        public VetDTOloginOrChangePassword
             (
             string email,
             string password
@@ -113,4 +113,15 @@ namespace ClinicaVeterinaria.API.Api.dto
             Surname = surname;
         }
     }
-}
+
+    public class VetDTOandToken
+    {
+        public VetDTO DTO { get; set; }
+        public string Token { get; set; }
+
+        public VetDTOandToken(VetDTO dTO, string token)
+        {
+            DTO = dTO;
+            Token = token;
+        }
+    }

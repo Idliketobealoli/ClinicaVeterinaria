@@ -26,6 +26,18 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return await context.Vets.FirstOrDefaultAsync(u => u.Id == id);
         }
 
+        public async Task<Vet?> FindByEmail(string email)
+        {
+            using ClinicaDBContext context = ContextFactory.CreateDbContext();
+            return await context.Vets.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
+        public async Task<Vet?> FindBySSNum(string ssnum)
+        {
+            using ClinicaDBContext context = ContextFactory.CreateDbContext();
+            return await context.Vets.FirstOrDefaultAsync(u => u.SSNumber == ssnum);
+        }
+
         public async Task<Vet> Create(Vet vet)
         {
             using (ClinicaDBContext context = ContextFactory.CreateDbContext())
@@ -36,24 +48,24 @@ namespace ClinicaVeterinaria.API.Api.repositories
             }
         }
 
-        public async Task<Vet?> Update(Guid id, Vet vet)
+        public async Task<Vet?> UpdatePassword(string email, string password)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            var foundVet = context.Vets.FirstOrDefault(u => u.Id == id);
+            var foundVet = context.Vets.FirstOrDefault(u => u.Email == email);
             if (foundVet != null)
             {
-                vet.Id = foundVet.Id;
-                context.Vets.Update(vet);
+                foundVet.Password = password;
+                context.Vets.Update(foundVet);
                 await context.SaveChangesAsync();
-                return vet;
+                return foundVet;
             }
             return null;
         }
 
-        public async Task<Vet?> Delete(Guid id)
+        public async Task<Vet?> Delete(string email)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
-            var foundVet = context.Vets.FirstOrDefault(u => u.Id == id);
+            var foundVet = context.Vets.FirstOrDefault(u => u.Email == email);
             if (foundVet != null)
             {
                 context.Vets.Remove(foundVet);

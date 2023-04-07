@@ -1,14 +1,16 @@
 ﻿using ClinicaVeterinaria.API.Api.dto;
 using ClinicaVeterinaria.API.Api.model;
+using ClinicaVeterinaria.API.Api.repositories;
 
 namespace ClinicaVeterinaria.API.Api.mappers
 {
     internal static class PetMapper
     {
-        public static PetFindAllDTO ToFindAllDTO(this Pet pet)
+        public static PetDTOshort ToDTOshort(this Pet pet)
         {
             return new
                 (
+                pet.Id,
                 pet.Photo,
                 pet.Name,
                 pet.Race,
@@ -17,11 +19,12 @@ namespace ClinicaVeterinaria.API.Api.mappers
                 );
         }
 
-        /*
-        public static PetIdDTO ToFindOneDTO(this Pet pet)
+        public static async Task<PetDTO> ToDTO(this Pet pet, UserRepository repo)
         {
+            var owner = await repo.FindByEmail(pet.OwnerEmail) ?? throw new Exception();
             return new
                 (
+                pet.Id,
                 pet.Photo,
                 pet.Name,
                 pet.Race,
@@ -30,10 +33,37 @@ namespace ClinicaVeterinaria.API.Api.mappers
                 pet.BirthDate,
                 pet.Weight,
                 pet.Size,
-                pet.History,
-                // owner
+                pet.History.ToDTO(),
+                owner.ToDTOshort()
                 );
         }
-        */
+
+        public static PetDTOnoPhoto ToDTOnoPhoto(this Pet pet)
+        {
+            return new
+                (
+                pet.Name,
+                pet.Race,
+                pet.Species,
+                pet.Sex
+                );
+        }
+
+        public static Pet FromDTO(this PetDTOcreate dto)
+        {
+            return new
+                (
+                Guid.NewGuid(),
+                dto.Name,
+                dto.Species,
+                dto.Race,
+                dto.Weight,
+                dto.Size,
+                dto.Sex,
+                dto.Date,
+                dto.OwnerEmail,
+                dto.Photo
+                );
+        }
     }
 }

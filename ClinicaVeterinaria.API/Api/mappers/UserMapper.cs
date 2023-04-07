@@ -24,5 +24,26 @@ namespace ClinicaVeterinaria.API.Api.mappers
                 user.Surname
                 );
         }
+
+        public static User FromDTOregister(this UserDTOregister dto)
+        {
+            return new
+                (
+                dto.Name,
+                dto.Surname,
+                dto.Email,
+                dto.Phone,
+                dto.Password
+                );
+        }
+
+        public static UserDTOandToken toDTOwithToken(this User user)
+        {
+            return new
+                (
+                user.ToDTO(),
+                "token" // esto habrá que modificarlo cuando metamos tokens
+                );
+        }
     }
 }
