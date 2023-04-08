@@ -1,4 +1,5 @@
 ﻿using ClinicaVeterinaria.API.Api.dto;
+using ClinicaVeterinaria.API.Api.exceptions;
 using ClinicaVeterinaria.API.Api.mappers;
 using ClinicaVeterinaria.API.Api.model;
 using ClinicaVeterinaria.API.Api.repositories;
@@ -38,8 +39,8 @@ namespace ClinicaVeterinaria.API.Api.services
         public async Task<AppointmentDTO> FindById(Guid id)
         {
             var task = await Repo.FindById(id);
-            if (task == null) { throw new Exception(); }
-            else return await task.ToDTO(UserService, PetService, VetService);
+            if (task == null) { throw new AppointmentNotFoundException($"Appointment with id {id} not found."); }
+            else return task.ToDTO(UserService, PetService, VetService);
         }
 
         public async Task<AppointmentDTO> Create(Appointment appointment)
@@ -69,25 +70,25 @@ namespace ClinicaVeterinaria.API.Api.services
                 var created = await Repo.Create(appointment);
                 if (created != null)
                 {
-                    return await created.ToDTO(UserService, PetService, VetService);
+                    return created.ToDTO(UserService, PetService, VetService);
                 }
-                else throw new Exception();
+                else throw new AppointmentBadRequestException("Could not create appointment.");
             }
-            else throw new Exception();
+            else throw new AppointmentBadRequestException("Incorrect data for the new appointment.");
         }
 
         public async Task<AppointmentDTO> Delete(Guid id)
         {
             var appointment = await Repo.FindById(id);
-            if (appointment == null) { throw new Exception(); }
-            var successfulResult = await appointment.ToDTO(UserService, PetService, VetService);
+            if (appointment == null) { throw new AppointmentNotFoundException($"Appointment with id {id} not found."); }
+            var successfulResult = appointment.ToDTO(UserService, PetService, VetService);
 
             var deleted = await Repo.Delete(id);
             if (deleted != null)
             {
                 return successfulResult;
             }
-            else throw new Exception();
+            else throw new AppointmentBadRequestException($"Could not delete Appointment with id {id}.");
         }
     }
 }

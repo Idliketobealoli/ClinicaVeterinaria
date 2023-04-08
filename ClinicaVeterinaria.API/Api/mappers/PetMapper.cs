@@ -1,4 +1,5 @@
 ﻿using ClinicaVeterinaria.API.Api.dto;
+using ClinicaVeterinaria.API.Api.exceptions;
 using ClinicaVeterinaria.API.Api.model;
 using ClinicaVeterinaria.API.Api.repositories;
 
@@ -21,7 +22,8 @@ namespace ClinicaVeterinaria.API.Api.mappers
 
         public static async Task<PetDTO> ToDTO(this Pet pet, UserRepository repo)
         {
-            var owner = await repo.FindByEmail(pet.OwnerEmail) ?? throw new Exception();
+            var owner = await repo.FindByEmail(pet.OwnerEmail) ??
+                throw new UserNotFoundException($"User with email {pet.OwnerEmail} not found.");
             return new
                 (
                 pet.Id,

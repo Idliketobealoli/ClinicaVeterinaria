@@ -1,4 +1,5 @@
 ﻿using ClinicaVeterinaria.API.Api.dto;
+using ClinicaVeterinaria.API.Api.exceptions;
 using ClinicaVeterinaria.API.Api.mappers;
 using ClinicaVeterinaria.API.Api.repositories;
 
@@ -36,14 +37,14 @@ namespace ClinicaVeterinaria.API.Api.services
         public async Task<PetDTO> FindById(Guid id)
         {
             var pet = await PetRepo.FindById(id);
-            if (pet == null) { throw new Exception(); }
+            if (pet == null) { throw new PetNotFoundException($"Pet with id {id} not found."); }
             else return await pet.ToDTO(UserRepo);
         }
 
         public async Task<PetDTOnoPhoto> FindByIdNoPhoto(Guid id)
         {
             var pet = await PetRepo.FindById(id);
-            if (pet == null) { throw new Exception(); }
+            if (pet == null) { throw new PetNotFoundException($"Pet with id {id} not found."); }
             else return pet.ToDTOnoPhoto();
         }
 
@@ -59,9 +60,9 @@ namespace ClinicaVeterinaria.API.Api.services
                 {
                     return await created.ToDTO(UserRepo);
                 }
-                else throw new Exception();
+                else throw new PetBadRequestException("Could not create pet.");
             }
-            else throw new Exception();
+            else throw new UserNotFoundException($"Owner with email {dto.OwnerEmail} not found.");
         }
 
         public async Task<PetDTO> Update(PetDTOupdate dto)
@@ -71,16 +72,16 @@ namespace ClinicaVeterinaria.API.Api.services
             {
                 return await updated.ToDTO(UserRepo);
             }
-            else throw new Exception();
+            else throw new PetNotFoundException($"Pet with id {dto.Id} not found.");
         }
 
         public async Task<PetDTO> Delete(Guid id)
         {
             // esto primero porque si no despues no se encontrara
             // historial ni vacunas
-            var pet = await PetRepo.FindById(id);
-            if (pet == null) { throw new Exception(); }
-            var successfullResult = await pet.ToDTO(UserRepo);
+            var pet = await PetRepo.FindById(id)
+                ?? throw new PetNotFoundException($"Pet with id {id} not found.");
+            var successfullResult = pet.ToDTO(UserRepo);
 
             // borramos todas las vacunas de la mascota
             var vaccines = await VacRepo.FindAll();
@@ -104,9 +105,9 @@ namespace ClinicaVeterinaria.API.Api.services
             var deleted = await PetRepo.Delete(id);
             if (deleted != null)
             {
-                return successfullResult;
+                return await successfullResult;
             }
-            else throw new Exception();
+            else throw new PetBadRequestException($"Could not delete Pet with id {id}.");
         }
     }
 }

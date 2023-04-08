@@ -1,4 +1,5 @@
 ﻿using ClinicaVeterinaria.API.Api.dto;
+using ClinicaVeterinaria.API.Api.exceptions;
 using ClinicaVeterinaria.API.Api.mappers;
 using ClinicaVeterinaria.API.Api.repositories;
 
@@ -27,14 +28,14 @@ namespace ClinicaVeterinaria.API.Api.services
         public async Task<UserDTO> FindByEmail(string email)
         {
             var user = await Repo.FindByEmail(email);
-            if (user == null) { throw new Exception(); }
+            if (user == null) { throw new UserNotFoundException($"User with Email {email} not found."); }
             else return user.ToDTO();
         }
 
         public async Task<UserDTOshort> FindByEmailShort(string email)
         {
             var user = await Repo.FindByEmail(email);
-            if (user == null) { throw new Exception(); }
+            if (user == null) { throw new UserNotFoundException($"User with Email {email} not found."); }
             else return user.ToDTOshort();
         }
 
@@ -46,7 +47,7 @@ namespace ClinicaVeterinaria.API.Api.services
             Task.WaitAll(userByEmail, userByPhone);
             if (userByPhone != null || userByEmail != null)
             {
-                throw new Exception();
+                throw new UserUnauthorizedException("Cannot use either that email or that phone number.");
             }
             else
             {
@@ -56,7 +57,7 @@ namespace ClinicaVeterinaria.API.Api.services
                 {
                     return created.toDTOwithToken();
                 }
-                else throw new Exception();
+                else throw new UserUnauthorizedException("Could not register user.");
             }
         }
 
@@ -66,7 +67,7 @@ namespace ClinicaVeterinaria.API.Api.services
             var userByEmail = await Repo.FindByEmail(dto.Email);
             if (userByEmail == null || userByEmail.Password != dto.Password)
             {
-                throw new Exception();
+                throw new UserUnauthorizedException("Incorrect email or password.");
             }
             else
             {
@@ -81,7 +82,7 @@ namespace ClinicaVeterinaria.API.Api.services
             {
                 return user.ToDTO();
             }
-            else throw new Exception();
+            else throw new UserNotFoundException($"User with email {dto.Email} not found.");
         }
 
         public async Task<UserDTO> Delete(string email)
@@ -91,7 +92,7 @@ namespace ClinicaVeterinaria.API.Api.services
             {
                 return user.ToDTO();
             }
-            else throw new Exception();
+            else throw new UserNotFoundException($"User with email {email} not found.");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ClinicaVeterinaria.API.Api.dto;
+using ClinicaVeterinaria.API.Api.exceptions;
 using ClinicaVeterinaria.API.Api.mappers;
 using ClinicaVeterinaria.API.Api.repositories;
 
@@ -27,21 +28,21 @@ namespace ClinicaVeterinaria.API.Api.services
         public async Task<VetDTO> FindByEmail(string email)
         {
             var user = await Repo.FindByEmail(email);
-            if (user == null) { throw new Exception(); }
+            if (user == null) { throw new VetNotFoundException($"Vet with email {email} not found."); }
             else return user.ToDTO();
         }
 
         public async Task<VetDTOshort> FindByEmailShort(string email)
         {
             var user = await Repo.FindByEmail(email);
-            if (user == null) { throw new Exception(); }
+            if (user == null) { throw new VetNotFoundException($"Vet with email {email} not found."); }
             else return user.ToDTOshort();
         }
 
         public async Task<VetDTOappointment> FindByEmailAppointment(string email)
         {
             var user = await Repo.FindByEmail(email);
-            if (user == null) { throw new Exception(); }
+            if (user == null) { throw new VetNotFoundException($"Vet with email {email} not found."); }
             else return user.ToDTOappointment();
         }
 
@@ -52,7 +53,7 @@ namespace ClinicaVeterinaria.API.Api.services
             Task.WaitAll(userByEmail, userBySSNumber);
             if (userBySSNumber != null || userByEmail != null)
             {
-                throw new Exception();
+                throw new VetUnauthorizedException("Cannot use either that email or that Social Security number.");
             }
             else
             {
@@ -62,7 +63,7 @@ namespace ClinicaVeterinaria.API.Api.services
                 {
                     return created.ToDTOwithToken();
                 }
-                else throw new Exception();
+                else throw new VetUnauthorizedException("Could not register vet.");
             }
         }
 
@@ -72,7 +73,7 @@ namespace ClinicaVeterinaria.API.Api.services
             var userByEmail = await Repo.FindByEmail(dto.Email);
             if (userByEmail == null || userByEmail.Password != dto.Password)
             {
-                throw new Exception();
+                throw new VetUnauthorizedException("Incorrect email or password.");
             }
             else
             {
@@ -87,7 +88,7 @@ namespace ClinicaVeterinaria.API.Api.services
             {
                 return user.ToDTO();
             }
-            else throw new Exception();
+            else throw new VetNotFoundException($"Vet with email {dto.Email} not found.");
         }
 
         public async Task<VetDTO> Delete(string email)
@@ -97,7 +98,7 @@ namespace ClinicaVeterinaria.API.Api.services
             {
                 return user.ToDTO();
             }
-            else throw new Exception();
+            else throw new VetNotFoundException($"Vet with email {email} not found.");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ClinicaVeterinaria.API.Api.dto;
+using ClinicaVeterinaria.API.Api.exceptions;
 using ClinicaVeterinaria.API.Api.mappers;
 using ClinicaVeterinaria.API.Api.repositories;
 
@@ -26,24 +27,24 @@ namespace ClinicaVeterinaria.API.Api.services
             return entitiesDTOs;
         }
 
-        public async Task<HistoryDTO?> FindByPetId(Guid id)
+        public async Task<HistoryDTO> FindByPetId(Guid id)
         {
             var entity = await HisRepo.FindByPetId(id);
-            if (entity == null) { return null; }
+            if (entity == null) { throw new HistoryNotFoundException($"History with PetId {id} not found."); }
             else return entity.ToDTO();
         }
 
-        public async Task<HistoryDTOvaccines?> FindByPetIdVaccinesOnly(Guid id)
+        public async Task<HistoryDTOvaccines> FindByPetIdVaccinesOnly(Guid id)
         {
             var entity = await HisRepo.FindByPetId(id);
-            if (entity == null) { return null; }
+            if (entity == null) { throw new HistoryNotFoundException($"History with PetId {id} not found."); }
             else return entity.ToDTOvaccines();
         }
 
-        public async Task<HistoryDTOailmentTreatment?> FindByPetIdAilmTreatOnly(Guid id)
+        public async Task<HistoryDTOailmentTreatment> FindByPetIdAilmTreatOnly(Guid id)
         {
             var entity = await HisRepo.FindByPetId(id);
-            if (entity == null) { return null; }
+            if (entity == null) { throw new HistoryNotFoundException($"History with PetId {id} not found."); }
             else return entity.ToDTOailmentTreatment();
         }
 
@@ -58,7 +59,7 @@ namespace ClinicaVeterinaria.API.Api.services
                 await HisRepo.Update(history.Id, history);
                 return history.ToDTO();
             }
-            else throw new Exception();
+            else throw new HistoryNotFoundException($"History with PetId {id} not found.");
         }
 
         public async Task<HistoryDTO> AddAilmentTreatment(Guid id, string ailment, string treatment)
@@ -70,7 +71,7 @@ namespace ClinicaVeterinaria.API.Api.services
                 await HisRepo.Update(history.Id, history);
                 return history.ToDTO();
             }
-            else throw new Exception();
+            else throw new HistoryNotFoundException($"History with PetId {id} not found.");
         }
     }
 }
