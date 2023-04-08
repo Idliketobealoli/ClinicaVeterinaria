@@ -125,3 +125,4 @@ namespace ClinicaVeterinaria.API.Api.dto
             Token = token;
         }
     }
+}

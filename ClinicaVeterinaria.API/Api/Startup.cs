@@ -1,6 +1,6 @@
 ﻿using ClinicaVeterinaria.API.Api.db;
 using ClinicaVeterinaria.API.Api.repositories;
-using ClinicaVeterinaria.API.Api.Schema;
+using ClinicaVeterinaria.API.Api.schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClinicaVeterinaria.API
