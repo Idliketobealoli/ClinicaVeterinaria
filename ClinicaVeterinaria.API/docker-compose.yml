@@ -14,5 +14,15 @@ services:
         volumes:
             - database_clinica:/var/lib/postgresql/data
 
+    clinicaveterinaria.api:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: "clinica_veterinaria"
+        ports:
+            - '1707:80'
+        depends_on:
+            - postgresql-database
+
 volumes:
     database_clinica:
