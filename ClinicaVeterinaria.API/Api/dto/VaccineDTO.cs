@@ -1,6 +1,4 @@
-﻿using ClinicaVeterinaria.API.Api.mappers;
-
-namespace ClinicaVeterinaria.API.Api.dto
+﻿namespace ClinicaVeterinaria.API.Api.dto
 {
     public class VaccineDTO
     {

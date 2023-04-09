@@ -41,7 +41,6 @@ namespace ClinicaVeterinaria.API.Api.services
 
         public async Task<UserDTOandToken> Register(UserDTOregister dto)
         {
-            // TODO: aqui primero hay que validar
             var userByEmail = Repo.FindByEmail(dto.Email);
             var userByPhone = Repo.FindByPhone(dto.Phone);
             Task.WaitAll(userByEmail, userByPhone);
@@ -63,7 +62,6 @@ namespace ClinicaVeterinaria.API.Api.services
 
         public async Task<UserDTOandToken> Login(UserDTOloginOrChangePassword dto)
         {
-            // TODO: aqui primero la validacion
             var userByEmail = await Repo.FindByEmail(dto.Email);
             if (userByEmail == null || userByEmail.Password != dto.Password)
             {

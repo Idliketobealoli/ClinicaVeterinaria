@@ -69,7 +69,6 @@ namespace ClinicaVeterinaria.API.Api.services
 
         public async Task<VetDTOandToken> Login(VetDTOloginOrChangePassword dto)
         {
-            // TODO: aqui primero la validacion
             var userByEmail = await Repo.FindByEmail(dto.Email);
             if (userByEmail == null || userByEmail.Password != dto.Password)
             {

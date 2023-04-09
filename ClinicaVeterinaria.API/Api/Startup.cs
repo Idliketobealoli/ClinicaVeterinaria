@@ -1,6 +1,8 @@
-﻿using ClinicaVeterinaria.API.Api.db;
+﻿using ClinicaVeterinaria.API.Api.controllers;
+using ClinicaVeterinaria.API.Api.db;
 using ClinicaVeterinaria.API.Api.repositories;
 using ClinicaVeterinaria.API.Api.schema;
+using ClinicaVeterinaria.API.Api.services;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClinicaVeterinaria.API
@@ -28,6 +30,16 @@ namespace ClinicaVeterinaria.API
             services.AddSingleton<HistoryRepository>();
             services.AddSingleton<VaccineRepository>();
             services.AddSingleton<PetRepository>();
+            services.AddSingleton<UserService>();
+            services.AddSingleton<VetService>();
+            services.AddSingleton<AppointmentService>();
+            services.AddSingleton<HistoryService>();
+            services.AddSingleton<PetService>();
+            services.AddSingleton<UserController>();
+            services.AddSingleton<VetController>();
+            services.AddSingleton<AppointmentController>();
+            services.AddSingleton<HistoryController>();
+            services.AddSingleton<PetController>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

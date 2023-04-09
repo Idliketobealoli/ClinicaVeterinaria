@@ -6,7 +6,7 @@ namespace ClinicaVeterinaria.API.Api.validators
 {
     public static class UserValidator
     {
-        public static bool Validate(this UserDTOregister dto)
+        public static void Validate(this UserDTOregister dto)
         {
             if (dto == null) throw new UserUnauthorizedException("Data must not be null.");
 
@@ -30,11 +30,9 @@ namespace ClinicaVeterinaria.API.Api.validators
 
             else if (dto.Password.Trim() != dto.RepeatPassword.Trim())
                 throw new UserUnauthorizedException("Passwords do not match.");
-
-            else return true;
         }
 
-        public static bool Validate(this UserDTOloginOrChangePassword dto)
+        public static void Validate(this UserDTOloginOrChangePassword dto)
         {
             if (dto == null) throw new UserUnauthorizedException("Data must not be null.");
 
@@ -43,8 +41,6 @@ namespace ClinicaVeterinaria.API.Api.validators
 
             else if (dto.Password.Length < 7)
                 throw new UserBadRequestException("Password must be at least 7 characters long.");
-
-            else return true;
         }
     }
 }

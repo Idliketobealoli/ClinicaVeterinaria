@@ -61,10 +61,12 @@ namespace ClinicaVeterinaria.API.Api.services
                 select ap;
             }
             if (
-                userByEmail != null && // Si el usuario existe en la DB
-                vetByEmail != null &&  // Si el veterinario existe en la DB
-                !newList.Any() &&      // Si no hay otras citas en esa hora
-                pet != null            // Si la mascota existe en la DB
+                userByEmail != null &&      // Si el usuario existe en la DB.
+                vetByEmail != null &&       // Si el veterinario existe en la DB.
+                !newList.Any() &&           // Si no hay otras citas en esa hora.
+                appointment.InitialDate     // Si la fecha de inicio es
+                < appointment.FinishDate && //  anterior a la de fin.
+                pet != null                 // Si la mascota existe en la DB.
                 )
             {
                 var created = await Repo.Create(appointment);

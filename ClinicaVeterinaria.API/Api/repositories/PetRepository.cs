@@ -42,13 +42,10 @@ namespace ClinicaVeterinaria.API.Api.repositories
             var found = context.Pets.FirstOrDefault(u => u.Id == pet.Id);
             if (found != null)
             {
-                found.Name = pet.Name;
-                found.Weight = pet.Weight;
-                found.Size = pet.Size;
-                if (pet.Photo != null)
-                {
-                    found.Photo = pet.Photo;
-                }
+                found.Name = pet.Name ?? found.Name;
+                found.Weight = pet.Weight ?? found.Weight;
+                found.Size = pet.Size ?? found.Size;
+                found.Photo = pet.Photo ?? found.Photo;
                 context.Pets.Update(found);
                 await context.SaveChangesAsync();
 
