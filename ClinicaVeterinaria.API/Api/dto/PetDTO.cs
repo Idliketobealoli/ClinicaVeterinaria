@@ -117,8 +117,8 @@ namespace ClinicaVeterinaria.API.Api.dto
         public string? Photo { get; set; }
 
         public PetDTOupdate(
-            Guid id, string name, double weight,
-            double size, string? photo
+            Guid id, string? name, double? weight,
+            double? size, string? photo
             )
         {
             Id = id;

@@ -1,5 +1,5 @@
 ﻿using ClinicaVeterinaria.API.Api.dto;
-using ClinicaVeterinaria.API.Api.exceptions;
+using ClinicaVeterinaria.API.Api.errors;
 using ClinicaVeterinaria.API.Api.mappers;
 using ClinicaVeterinaria.API.Api.repositories;
 
@@ -25,28 +25,37 @@ namespace ClinicaVeterinaria.API.Api.services
             return entitiesDTOs;
         }
 
-        public async Task<UserDTO> FindByEmail(string email)
+        public async Task<Either<UserDTO, DomainError>> FindByEmail(string email)
         {
             var user = await Repo.FindByEmail(email);
-            if (user == null) { throw new UserNotFoundException($"User with Email {email} not found."); }
-            else return user.ToDTO();
+            if (user == null)
+            {
+                return new Either<UserDTO, DomainError>
+                    (new UserErrorNotFound($"User with Email {email} not found."));
+            }
+            else return new Either<UserDTO, DomainError>(user.ToDTO());
         }
 
-        public async Task<UserDTOshort> FindByEmailShort(string email)
+        public async Task<Either<UserDTOshort, DomainError>> FindByEmailShort(string email)
         {
             var user = await Repo.FindByEmail(email);
-            if (user == null) { throw new UserNotFoundException($"User with Email {email} not found."); }
-            else return user.ToDTOshort();
+            if (user == null)
+            {
+                return new Either<UserDTOshort, DomainError>
+                    (new UserErrorNotFound($"User with Email {email} not found."));
+            }
+            else return new Either<UserDTOshort, DomainError>(user.ToDTOshort());
         }
 
-        public async Task<UserDTOandToken> Register(UserDTOregister dto)
+        public async Task<Either<UserDTOandToken, DomainError>> Register(UserDTOregister dto)
         {
             var userByEmail = Repo.FindByEmail(dto.Email);
             var userByPhone = Repo.FindByPhone(dto.Phone);
             Task.WaitAll(userByEmail, userByPhone);
             if (userByPhone != null || userByEmail != null)
             {
-                throw new UserUnauthorizedException("Cannot use either that email or that phone number.");
+                return new Either<UserDTOandToken, DomainError>
+                    (new UserErrorUnauthorized("Cannot use either that email or that phone number."));
             }
             else
             {
@@ -54,43 +63,47 @@ namespace ClinicaVeterinaria.API.Api.services
                 var created = await Repo.Create(user);
                 if (created != null)
                 {
-                    return created.toDTOwithToken();
+                    return new Either<UserDTOandToken, DomainError>(created.toDTOwithToken());
                 }
-                else throw new UserUnauthorizedException("Could not register user.");
+                else return new Either<UserDTOandToken, DomainError>
+                        (new UserErrorUnauthorized("Could not register user."));
             }
         }
 
-        public async Task<UserDTOandToken> Login(UserDTOloginOrChangePassword dto)
+        public async Task<Either<UserDTOandToken, DomainError>> Login(UserDTOloginOrChangePassword dto)
         {
             var userByEmail = await Repo.FindByEmail(dto.Email);
             if (userByEmail == null || userByEmail.Password != dto.Password)
             {
-                throw new UserUnauthorizedException("Incorrect email or password.");
+                return new Either<UserDTOandToken, DomainError>
+                    (new UserErrorUnauthorized("Incorrect email or password."));
             }
             else
             {
-                return userByEmail.toDTOwithToken();
+                return new Either<UserDTOandToken, DomainError>(userByEmail.toDTOwithToken());
             }
         }
 
-        public async Task<UserDTO> ChangePassword(UserDTOloginOrChangePassword dto)
+        public async Task<Either<UserDTO, DomainError>> ChangePassword(UserDTOloginOrChangePassword dto)
         {
             var user = await Repo.UpdatePassword(dto.Email, dto.Password);
             if (user != null)
             {
-                return user.ToDTO();
+                return new Either<UserDTO, DomainError>(user.ToDTO());
             }
-            else throw new UserNotFoundException($"User with email {dto.Email} not found.");
+            else return new Either<UserDTO, DomainError>
+                    (new UserErrorNotFound($"User with email {dto.Email} not found."));
         }
 
-        public async Task<UserDTO> Delete(string email)
+        public async Task<Either<UserDTO, DomainError>> Delete(string email)
         {
             var user = await Repo.Delete(email);
             if (user != null)
             {
-                return user.ToDTO();
+                return new Either<UserDTO, DomainError>(user.ToDTO());
             }
-            else throw new UserNotFoundException($"User with email {email} not found.");
+            else return new Either<UserDTO, DomainError>
+                    (new UserErrorNotFound($"User with email {email} not found."));
         }
     }
 }

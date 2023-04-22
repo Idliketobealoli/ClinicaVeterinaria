@@ -19,7 +19,12 @@ namespace ClinicaVeterinaria.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddGraphQLServer()
-                .AddQueryType<Query>();
+                .AddQueryType<Query>()
+                .AddType<VetController>()
+                .AddType<UserController>()
+                .AddType<PetController>()
+                .AddType<HistoryController>()
+                .AddType<AppointmentController>();
 
             string? connectionString = _configuration.GetConnectionString("default_connection");
             services.AddPooledDbContextFactory<ClinicaDBContext>(o => o.UseNpgsql(connectionString));

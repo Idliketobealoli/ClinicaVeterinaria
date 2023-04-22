@@ -1,5 +1,5 @@
 ﻿using ClinicaVeterinaria.API.Api.dto;
-using ClinicaVeterinaria.API.Api.exceptions;
+using ClinicaVeterinaria.API.Api.errors;
 using ClinicaVeterinaria.API.Api.mappers;
 using ClinicaVeterinaria.API.Api.repositories;
 
@@ -27,28 +27,40 @@ namespace ClinicaVeterinaria.API.Api.services
             return entitiesDTOs;
         }
 
-        public async Task<HistoryDTO> FindByPetId(Guid id)
+        public async Task<Either<HistoryDTO, DomainError>> FindByPetId(Guid id)
         {
             var entity = await HisRepo.FindByPetId(id);
-            if (entity == null) { throw new HistoryNotFoundException($"History with PetId {id} not found."); }
-            else return entity.ToDTO();
+            if (entity == null)
+            {
+                return new Either<HistoryDTO, DomainError>
+                    (new HistoryErrorNotFound($"History with PetId {id} not found."));
+            }
+            else return new Either<HistoryDTO, DomainError>(entity.ToDTO());
         }
 
-        public async Task<HistoryDTOvaccines> FindByPetIdVaccinesOnly(Guid id)
+        public async Task<Either<HistoryDTOvaccines, DomainError>> FindByPetIdVaccinesOnly(Guid id)
         {
             var entity = await HisRepo.FindByPetId(id);
-            if (entity == null) { throw new HistoryNotFoundException($"History with PetId {id} not found."); }
-            else return entity.ToDTOvaccines();
+            if (entity == null)
+            {
+                return new Either<HistoryDTOvaccines, DomainError>
+                    (new HistoryErrorNotFound($"History with PetId {id} not found."));
+            }
+            else return new Either<HistoryDTOvaccines, DomainError>(entity.ToDTOvaccines());
         }
 
-        public async Task<HistoryDTOailmentTreatment> FindByPetIdAilmTreatOnly(Guid id)
+        public async Task<Either<HistoryDTOailmentTreatment, DomainError>> FindByPetIdAilmTreatOnly(Guid id)
         {
             var entity = await HisRepo.FindByPetId(id);
-            if (entity == null) { throw new HistoryNotFoundException($"History with PetId {id} not found."); }
-            else return entity.ToDTOailmentTreatment();
+            if (entity == null)
+            {
+                return new Either<HistoryDTOailmentTreatment, DomainError>
+                    (new HistoryErrorNotFound($"History with PetId {id} not found."));
+            }
+            else return new Either<HistoryDTOailmentTreatment, DomainError>(entity.ToDTOailmentTreatment());
         }
 
-        public async Task<HistoryDTO> AddVaccine(Guid id, VaccineDTO vaccine)
+        public async Task<Either<HistoryDTO, DomainError>> AddVaccine(Guid id, VaccineDTO vaccine)
         {
             var history = await HisRepo.FindByPetId(id);
             if (history != null)
@@ -57,21 +69,23 @@ namespace ClinicaVeterinaria.API.Api.services
                 history.Vaccines.Add(newVaccine);
                 await VacRepo.Create(newVaccine);
                 await HisRepo.Update(history.Id, history);
-                return history.ToDTO();
+                return new Either<HistoryDTO, DomainError>(history.ToDTO());
             }
-            else throw new HistoryNotFoundException($"History with PetId {id} not found.");
+            else return new Either<HistoryDTO, DomainError>
+                    (new HistoryErrorNotFound($"History with PetId {id} not found."));
         }
 
-        public async Task<HistoryDTO> AddAilmentTreatment(Guid id, string ailment, string treatment)
+        public async Task<Either<HistoryDTO, DomainError>> AddAilmentTreatment(Guid id, string ailment, string treatment)
         {
             var history = await HisRepo.FindByPetId(id);
             if (history != null)
             {
                 history.AilmentTreatment.TryAdd(ailment, treatment);
                 await HisRepo.Update(history.Id, history);
-                return history.ToDTO();
+                return new Either<HistoryDTO, DomainError>(history.ToDTO());
             }
-            else throw new HistoryNotFoundException($"History with PetId {id} not found.");
+            else return new Either<HistoryDTO, DomainError>
+                    (new HistoryErrorNotFound($"History with PetId {id} not found."));
         }
     }
 }

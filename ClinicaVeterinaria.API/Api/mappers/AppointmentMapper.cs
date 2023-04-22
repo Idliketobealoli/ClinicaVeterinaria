@@ -1,7 +1,5 @@
 ﻿using ClinicaVeterinaria.API.Api.dto;
-using ClinicaVeterinaria.API.Api.exceptions;
 using ClinicaVeterinaria.API.Api.model;
-using ClinicaVeterinaria.API.Api.services;
 
 namespace ClinicaVeterinaria.API.Api.mappers
 {
@@ -9,39 +7,32 @@ namespace ClinicaVeterinaria.API.Api.mappers
     {
         public static AppointmentDTO ToDTO
             (
-            this Appointment appointment, UserService uService,
-            PetService pService, VetService vService
+            this Appointment appointment, User user,
+            Pet pet, Vet vet
             )
         {
-            var user = uService.FindByEmailShort(appointment.UserEmail);
-            var pet = pService.FindByIdNoPhoto(appointment.PetId);
-            var vet = vService.FindByEmailAppointment(appointment.VetEmail);
-            Task.WaitAll(user, pet, vet);
-
             return new
                 (
-                user.Result ?? throw new UserNotFoundException($"User with email {appointment.UserEmail} not found."),
+                user.ToDTOshort(),
                 appointment.InitialDate,
                 appointment.FinishDate,
-                pet.Result ?? throw new Exception(),
+                pet.ToDTOnoPhoto(),
                 appointment.Issue,
                 appointment.State,
-                vet.Result ?? throw new VetNotFoundException($"Vet with email {appointment.VetEmail} not found.")
+                vet.ToDTOappointment()
                 );
         }
 
-        public static async Task<AppointmentDTOshort> ToDTOshort
+        public static AppointmentDTOshort ToDTOshort
             (
-            this Appointment appointment, PetService pService
+            this Appointment appointment, Pet pet
             )
         {
-            var pet = await pService.FindByIdNoPhoto(appointment.PetId);
-
             return new
                 (
                 appointment.Id,
                 appointment.InitialDate,
-                pet
+                pet.ToDTOnoPhoto()
                 );
         }
     }

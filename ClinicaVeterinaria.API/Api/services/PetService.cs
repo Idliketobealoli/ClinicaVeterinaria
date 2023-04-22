@@ -1,5 +1,5 @@
 ﻿using ClinicaVeterinaria.API.Api.dto;
-using ClinicaVeterinaria.API.Api.exceptions;
+using ClinicaVeterinaria.API.Api.errors;
 using ClinicaVeterinaria.API.Api.mappers;
 using ClinicaVeterinaria.API.Api.repositories;
 
@@ -34,21 +34,35 @@ namespace ClinicaVeterinaria.API.Api.services
             return petsDTO;
         }
 
-        public async Task<PetDTO> FindById(Guid id)
+        public async Task<Either<PetDTO, DomainError>> FindById(Guid id)
         {
             var pet = await PetRepo.FindById(id);
-            if (pet == null) { throw new PetNotFoundException($"Pet with id {id} not found."); }
-            else return await pet.ToDTO(UserRepo);
+            if (pet == null)
+            {
+                return new Either<PetDTO, DomainError>
+                    (new PetErrorNotFound($"Pet with id {id} not found."));
+            }
+            var owner = await UserRepo.FindByEmail(pet.OwnerEmail);
+            if (owner == null)
+            {
+                return new Either<PetDTO, DomainError>
+                    (new UserErrorNotFound($"User with id {id} not found."));
+            }
+            else return new Either<PetDTO, DomainError>(pet.ToDTO(owner));
         }
 
-        public async Task<PetDTOnoPhoto> FindByIdNoPhoto(Guid id)
+        public async Task<Either<PetDTOnoPhoto, DomainError>> FindByIdNoPhoto(Guid id)
         {
             var pet = await PetRepo.FindById(id);
-            if (pet == null) { throw new PetNotFoundException($"Pet with id {id} not found."); }
-            else return pet.ToDTOnoPhoto();
+            if (pet == null)
+            {
+                return new Either<PetDTOnoPhoto, DomainError>
+                    (new PetErrorNotFound($"Pet with id {id} not found."));
+            }
+            else return new Either<PetDTOnoPhoto, DomainError>(pet.ToDTOnoPhoto());
         }
 
-        public async Task<PetDTO> Create(PetDTOcreate dto)
+        public async Task<Either<PetDTO, DomainError>> Create(PetDTOcreate dto)
         {
             var user = await UserRepo.FindByEmail(dto.OwnerEmail);
             if (user != null)
@@ -58,30 +72,49 @@ namespace ClinicaVeterinaria.API.Api.services
                 await HisRepo.Create(pet.History);
                 if (created != null)
                 {
-                    return await created.ToDTO(UserRepo);
+                    return new Either<PetDTO, DomainError>(created.ToDTO(user));
                 }
-                else throw new PetBadRequestException("Could not create pet.");
+                else return new Either<PetDTO, DomainError>
+                        (new PetErrorBadRequest("Could not create pet."));
             }
-            else throw new UserNotFoundException($"Owner with email {dto.OwnerEmail} not found.");
+            else return new Either<PetDTO, DomainError>
+                    (new UserErrorNotFound($"Owner with email {dto.OwnerEmail} not found."));
         }
 
-        public async Task<PetDTO> Update(PetDTOupdate dto)
+        public async Task<Either<PetDTO, DomainError>> Update(PetDTOupdate dto)
         {
             var updated = await PetRepo.Update(dto);
             if (updated != null)
             {
-                return await updated.ToDTO(UserRepo);
+                var owner = await UserRepo.FindByEmail(updated.OwnerEmail);
+                if (owner != null)
+                {
+                    return new Either<PetDTO, DomainError>(updated.ToDTO(owner));
+                }
+                else return new Either<PetDTO, DomainError>
+                        (new UserErrorNotFound($"User with email {updated.OwnerEmail} not found."));
             }
-            else throw new PetNotFoundException($"Pet with id {dto.Id} not found.");
+            else return new Either<PetDTO, DomainError>
+                    (new PetErrorNotFound($"Pet with id {dto.Id} not found."));
         }
 
-        public async Task<PetDTO> Delete(Guid id)
+        public async Task<Either<PetDTO, DomainError>> Delete(Guid id)
         {
             // esto primero porque si no despues no se encontrara
             // historial ni vacunas
-            var pet = await PetRepo.FindById(id)
-                ?? throw new PetNotFoundException($"Pet with id {id} not found.");
-            var successfullResult = pet.ToDTO(UserRepo);
+            var pet = await PetRepo.FindById(id);
+            if (pet == null)
+            {
+                return new Either<PetDTO, DomainError>
+                    (new PetErrorNotFound($"Pet with id {id} not found."));
+            }
+            var owner = await UserRepo.FindByEmail(pet.OwnerEmail);
+            if (owner == null)
+            {
+                return new Either<PetDTO, DomainError>
+                    (new UserErrorNotFound($"User with email {pet.OwnerEmail} not found."));
+            }
+            var successfullResult = pet.ToDTO(owner);
 
             // borramos todas las vacunas de la mascota
             var vaccines = await VacRepo.FindAll();
@@ -105,9 +138,10 @@ namespace ClinicaVeterinaria.API.Api.services
             var deleted = await PetRepo.Delete(id);
             if (deleted != null)
             {
-                return await successfullResult;
+                return new Either<PetDTO, DomainError>(successfullResult);
             }
-            else throw new PetBadRequestException($"Could not delete Pet with id {id}.");
+            else return new Either<PetDTO, DomainError>
+                    (new PetErrorBadRequest($"Could not delete Pet with id {id}."));
         }
     }
 }

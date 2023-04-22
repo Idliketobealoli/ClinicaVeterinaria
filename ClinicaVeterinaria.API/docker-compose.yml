@@ -9,8 +9,6 @@ services:
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=MiGataSeLlamaGata
             - POSTGRES_DB=ClinicaVeterinariaTFG
-        ports:
-            - '5432:5432'
         volumes:
             - database_clinica:/var/lib/postgresql/data
 

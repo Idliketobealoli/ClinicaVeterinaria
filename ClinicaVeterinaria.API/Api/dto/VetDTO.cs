@@ -75,6 +75,18 @@ namespace ClinicaVeterinaria.API.Api.dto
         public Role Role { get; set; }
         public string Specialty { get; set; }
 
+        public VetDTOregister()
+        {
+            Name = "";
+            Surname = "";
+            Email = "";
+            SSNumber = "";
+            Password = "";
+            RepeatPassword = "";
+            Role = Role.VET;
+            Specialty = "";
+        }
+
         public VetDTOregister
             (
             string name,
