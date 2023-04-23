@@ -2,6 +2,7 @@
 using ClinicaVeterinaria.API.Api.model;
 using ClinicaVeterinaria.API.Api.schema;
 using ClinicaVeterinaria.API.Api.services;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace ClinicaVeterinaria.API.Api.controllers
@@ -17,47 +18,59 @@ namespace ClinicaVeterinaria.API.Api.controllers
         }
 
         [UseDbContext(typeof(ClinicaDBContext))]
-        public string FindAll()
+        public Result FindAllAppointments()
         {
+            Stopwatch.StartNew();
             var task = Service.FindAll();
             task.Wait();
-            return JsonSerializer.Serialize(Results.Json(data: task.Result, statusCode: 200));
+            var time = Stopwatch.GetTimestamp();
+
+            return new Result(200, JsonSerializer.Serialize(task.Result), time);
         }
 
         [UseDbContext(typeof(ClinicaDBContext))]
-        public string FindById(Guid id)
+        public Result FindAppointmentById(Guid id)
         {
+            Stopwatch.StartNew();
             var task = Service.FindById(id);
             task.Wait();
-            return JsonSerializer.Serialize(task.Result.Match
+            var time = Stopwatch.GetTimestamp();
+
+            return task.Result.Match
                 (
-                onSuccess: x => Results.Json(data: x, statusCode: 200),
-                onError: x => Results.Json(data: x.Message, statusCode: x.Code)
-                ));
+                onSuccess: x => new Result(200, JsonSerializer.Serialize(x), time),
+                onError: x => new Result(x.Code, x.Message, time)
+                );
         }
 
         [UseDbContext(typeof(ClinicaDBContext))]
-        public string Create(Appointment appointment)
+        public Result CreateAppointment(Appointment appointment)
         {
+            Stopwatch.StartNew();
             var task = Service.Create(appointment);
             task.Wait();
-            return JsonSerializer.Serialize(task.Result.Match
+            var time = Stopwatch.GetTimestamp();
+
+            return task.Result.Match
                 (
-                onSuccess: x => Results.Json(data: x, statusCode: 201),
-                onError: x => Results.Json(data: x.Message, statusCode: x.Code)
-                ));
+                onSuccess: x => new Result(201, JsonSerializer.Serialize(x), time),
+                onError: x => new Result(x.Code, x.Message, time)
+                );
         }
 
         [UseDbContext(typeof(ClinicaDBContext))]
-        public string Delete(Guid id)
+        public Result DeleteAppointment(Guid id)
         {
+            Stopwatch.StartNew();
             var task = Service.Delete(id);
             task.Wait();
-            return JsonSerializer.Serialize(task.Result.Match
+            var time = Stopwatch.GetTimestamp();
+
+            return task.Result.Match
                 (
-                onSuccess: x => Results.Json(data: x, statusCode: 200),
-                onError: x => Results.Json(data: x.Message, statusCode: x.Code)
-                ));
+                onSuccess: x => new Result(200, JsonSerializer.Serialize(x), time),
+                onError: x => new Result(x.Code, x.Message, time)
+                );
         }
     }
 }

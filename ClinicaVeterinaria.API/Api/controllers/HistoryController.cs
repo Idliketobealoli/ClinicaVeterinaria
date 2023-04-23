@@ -3,6 +3,7 @@ using ClinicaVeterinaria.API.Api.dto;
 using ClinicaVeterinaria.API.Api.schema;
 using ClinicaVeterinaria.API.Api.services;
 using ClinicaVeterinaria.API.Api.validators;
+using System.Diagnostics;
 using System.Text.Json;
 
 namespace ClinicaVeterinaria.API.Api.controllers
@@ -18,77 +19,96 @@ namespace ClinicaVeterinaria.API.Api.controllers
         }
 
         [UseDbContext(typeof(ClinicaDBContext))]
-        public string FindAll()
+        public Result FindAllHistories()
         {
+            Stopwatch.StartNew();
             var task = Service.FindAll();
             task.Wait();
-            return JsonSerializer.Serialize(Results.Json(data: task.Result, statusCode: 200));
+            var time = Stopwatch.GetTimestamp();
+
+            return new Result(200, JsonSerializer.Serialize(task.Result), time);
         }
 
         [UseDbContext(typeof(ClinicaDBContext))]
-        public string FindByPetId(Guid id)
+        public Result FindHistoryByPetId(Guid id)
         {
+            Stopwatch.StartNew();
             var task = Service.FindByPetId(id);
             task.Wait();
-            return JsonSerializer.Serialize(task.Result.Match
+            var time = Stopwatch.GetTimestamp();
+
+            return task.Result.Match
                 (
-                onSuccess: x => Results.Json(data: x, statusCode: 200),
-                onError: x => Results.Json(data: x.Message, statusCode: x.Code)
-                ));
+                onSuccess: x => new Result(200, JsonSerializer.Serialize(x), time),
+                onError: x => new Result(x.Code, x.Message, time)
+                );
         }
 
         [UseDbContext(typeof(ClinicaDBContext))]
-        public string FindByPetIdVaccinesOnly(Guid id)
+        public Result FindHistoryByPetIdVaccinesOnly(Guid id)
         {
+            Stopwatch.StartNew();
             var task = Service.FindByPetIdVaccinesOnly(id);
             task.Wait();
-            return JsonSerializer.Serialize(task.Result.Match
+            var time = Stopwatch.GetTimestamp();
+
+            return task.Result.Match
                 (
-                onSuccess: x => Results.Json(data: x, statusCode: 200),
-                onError: x => Results.Json(data: x.Message, statusCode: x.Code)
-                ));
+                onSuccess: x => new Result(200, JsonSerializer.Serialize(x), time),
+                onError: x => new Result(x.Code, x.Message, time)
+                );
         }
 
         [UseDbContext(typeof(ClinicaDBContext))]
-        public string FindByPetIdAilmTreatOnly(Guid id)
+        public Result FindHistoryByPetIdAilmTreatOnly(Guid id)
         {
+            Stopwatch.StartNew();
             var task = Service.FindByPetIdAilmTreatOnly(id);
             task.Wait();
-            return JsonSerializer.Serialize(task.Result.Match
+            var time = Stopwatch.GetTimestamp();
+
+            return task.Result.Match
                 (
-                onSuccess: x => Results.Json(data: x, statusCode: 200),
-                onError: x => Results.Json(data: x.Message, statusCode: x.Code)
-                ));
+                onSuccess: x => new Result(200, JsonSerializer.Serialize(x), time),
+                onError: x => new Result(x.Code, x.Message, time)
+                );
         }
 
         [UseDbContext(typeof(ClinicaDBContext))]
-        public string AddVaccine(Guid id, VaccineDTO vaccine)
+        public Result AddVaccine(Guid id, VaccineDTO vaccine)
         {
+            Stopwatch.StartNew();
             var err = vaccine.Validate();
             if (err != null)
             {
-                return JsonSerializer.Serialize(Results.Json(data: err.Message, statusCode: err.Code));
+                var t = Stopwatch.GetTimestamp();
+                return new Result(err.Code, err.Message, t);
             }
 
             var task = Service.AddVaccine(id, vaccine);
             task.Wait();
-            return JsonSerializer.Serialize(task.Result.Match
+            var time = Stopwatch.GetTimestamp();
+
+            return task.Result.Match
                 (
-                onSuccess: x => Results.Json(data: x, statusCode: 200),
-                onError: x => Results.Json(data: x.Message, statusCode: x.Code)
-                ));
+                onSuccess: x => new Result(201, JsonSerializer.Serialize(x), time),
+                onError: x => new Result(x.Code, x.Message, time)
+                );
         }
 
         [UseDbContext(typeof(ClinicaDBContext))]
-        public string AddAilmentTreatment(Guid id, string ailment, string treatment)
+        public Result AddAilmentTreatment(Guid id, string ailment, string treatment)
         {
+            Stopwatch.StartNew();
             var task = Service.AddAilmentTreatment(id, ailment, treatment);
             task.Wait();
-            return JsonSerializer.Serialize(task.Result.Match
+            var time = Stopwatch.GetTimestamp();
+
+            return task.Result.Match
                 (
-                onSuccess: x => Results.Json(data: x, statusCode: 200),
-                onError: x => Results.Json(data: x.Message, statusCode: x.Code)
-                ));
+                onSuccess: x => new Result(201, JsonSerializer.Serialize(x), time),
+                onError: x => new Result(x.Code, x.Message, time)
+                );
         }
     }
 }
