@@ -13,26 +13,26 @@ namespace ClinicaVeterinaria.API.Api.repositories
             ContextFactory = contextFactory;
         }
 
-        public async Task<List<History>> FindAll()
+        public virtual async Task<List<History>> FindAll()
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var histories = await context.Histories.ToListAsync();
             return histories ?? new();
         }
 
-        public async Task<History?> FindById(Guid id)
+        public virtual async Task<History?> FindById(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             return await context.Histories.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<History?> FindByPetId(Guid id)
+        public virtual async Task<History?> FindByPetId(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             return await context.Histories.FirstOrDefaultAsync(u => u.PetId == id);
         }
 
-        public async Task<History> Create(History history)
+        public virtual async Task<History> Create(History history)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             context.Histories.Add(history);
@@ -41,7 +41,7 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return history;
         }
 
-        public async Task<History?> Update(Guid id, History history)
+        public virtual async Task<History?> Update(Guid id, History history)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var found = context.Histories.FirstOrDefault(u => u.Id == id);
@@ -56,7 +56,7 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return null;
         }
 
-        public async Task<History?> Delete(Guid id)
+        public virtual async Task<History?> Delete(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var found = context.Histories.FirstOrDefault(u => u.Id == id);

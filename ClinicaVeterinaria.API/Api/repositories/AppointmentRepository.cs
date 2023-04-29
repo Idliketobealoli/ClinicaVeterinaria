@@ -13,20 +13,20 @@ namespace ClinicaVeterinaria.API.Api.repositories
             ContextFactory = contextFactory;
         }
 
-        public async Task<List<Appointment>> FindAll()
+        public virtual async Task<List<Appointment>> FindAll()
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var appointment = await context.Appointments.ToListAsync();
             return appointment ?? new();
         }
 
-        public async Task<Appointment?> FindById(Guid id)
+        public virtual async Task<Appointment?> FindById(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             return await context.Appointments.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<Appointment> Create(Appointment appointment)
+        public virtual async Task<Appointment> Create(Appointment appointment)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             context.Appointments.Add(appointment);
@@ -35,7 +35,7 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return appointment;
         }
 
-        public async Task<Appointment?> Delete(Guid id)
+        public virtual async Task<Appointment?> Delete(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var found = context.Appointments.FirstOrDefault(u => u.Id == id);

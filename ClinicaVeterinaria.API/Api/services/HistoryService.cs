@@ -16,7 +16,7 @@ namespace ClinicaVeterinaria.API.Api.services
             VacRepo = vacRepo;
         }
 
-        public async Task<List<HistoryDTO>> FindAll()
+        public virtual async Task<List<HistoryDTO>> FindAll()
         {
             var entities = await HisRepo.FindAll();
             var entitiesDTOs = new List<HistoryDTO>();
@@ -27,7 +27,7 @@ namespace ClinicaVeterinaria.API.Api.services
             return entitiesDTOs;
         }
 
-        public async Task<Either<HistoryDTO, DomainError>> FindByPetId(Guid id)
+        public virtual async Task<Either<HistoryDTO, DomainError>> FindByPetId(Guid id)
         {
             var entity = await HisRepo.FindByPetId(id);
             if (entity == null)
@@ -38,7 +38,7 @@ namespace ClinicaVeterinaria.API.Api.services
             else return new Either<HistoryDTO, DomainError>(entity.ToDTO());
         }
 
-        public async Task<Either<HistoryDTOvaccines, DomainError>> FindByPetIdVaccinesOnly(Guid id)
+        public virtual async Task<Either<HistoryDTOvaccines, DomainError>> FindByPetIdVaccinesOnly(Guid id)
         {
             var entity = await HisRepo.FindByPetId(id);
             if (entity == null)
@@ -49,7 +49,7 @@ namespace ClinicaVeterinaria.API.Api.services
             else return new Either<HistoryDTOvaccines, DomainError>(entity.ToDTOvaccines());
         }
 
-        public async Task<Either<HistoryDTOailmentTreatment, DomainError>> FindByPetIdAilmTreatOnly(Guid id)
+        public virtual async Task<Either<HistoryDTOailmentTreatment, DomainError>> FindByPetIdAilmTreatOnly(Guid id)
         {
             var entity = await HisRepo.FindByPetId(id);
             if (entity == null)
@@ -60,7 +60,7 @@ namespace ClinicaVeterinaria.API.Api.services
             else return new Either<HistoryDTOailmentTreatment, DomainError>(entity.ToDTOailmentTreatment());
         }
 
-        public async Task<Either<HistoryDTO, DomainError>> AddVaccine(Guid id, VaccineDTO vaccine)
+        public virtual async Task<Either<HistoryDTO, DomainError>> AddVaccine(Guid id, VaccineDTO vaccine)
         {
             var history = await HisRepo.FindByPetId(id);
             if (history != null)
@@ -75,7 +75,7 @@ namespace ClinicaVeterinaria.API.Api.services
                     (new HistoryErrorNotFound($"History with PetId {id} not found."));
         }
 
-        public async Task<Either<HistoryDTO, DomainError>> AddAilmentTreatment(Guid id, string ailment, string treatment)
+        public virtual async Task<Either<HistoryDTO, DomainError>> AddAilmentTreatment(Guid id, string ailment, string treatment)
         {
             var history = await HisRepo.FindByPetId(id);
             if (history != null)

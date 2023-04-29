@@ -25,7 +25,7 @@ namespace ClinicaVeterinaria.API.Api.services
             VetRepo = vetRepo;
         }
 
-        public async Task<List<AppointmentDTOshort>> FindAll()
+        public virtual async Task<List<AppointmentDTOshort>> FindAll()
         {
             var entities = await Repo.FindAll();
             var entitiesDTOs = new List<AppointmentDTOshort>();
@@ -45,7 +45,7 @@ namespace ClinicaVeterinaria.API.Api.services
             return entitiesDTOs;
         }
 
-        public async Task<Either<AppointmentDTO, DomainError>> FindById(Guid id)
+        public virtual async Task<Either<AppointmentDTO, DomainError>> FindById(Guid id)
         {
             var task = await Repo.FindById(id);
             if (task == null)
@@ -72,7 +72,7 @@ namespace ClinicaVeterinaria.API.Api.services
             }
         }
 
-        public async Task<Either<AppointmentDTO, DomainError>> Create(Appointment appointment)
+        public virtual async Task<Either<AppointmentDTO, DomainError>> Create(Appointment appointment)
         {
             var userByEmail = UserRepo.FindByEmail(appointment.UserEmail);
             var vetByEmail = VetRepo.FindByEmail(appointment.VetEmail);
@@ -124,7 +124,7 @@ namespace ClinicaVeterinaria.API.Api.services
                         (new AppointmentErrorBadRequest("Incorrect data for the new appointment."));
         }
 
-        public async Task<Either<AppointmentDTO, DomainError>> Delete(Guid id)
+        public virtual async Task<Either<AppointmentDTO, DomainError>> Delete(Guid id)
         {
             var appointment = await Repo.FindById(id);
             if (appointment == null)

@@ -8,37 +8,39 @@ namespace ClinicaVeterinaria.API.Api.repositories
     {
         private readonly IDbContextFactory<ClinicaDBContext> ContextFactory;
 
+        public UserRepository() { }
+
         public UserRepository(IDbContextFactory<ClinicaDBContext> contextFactory)
         {
             ContextFactory = contextFactory;
         }
 
-        public async Task<List<User>> FindAll()
+        public virtual async Task<List<User>> FindAll()
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var users = await context.Users.ToListAsync();
             return users ?? new();
         }
 
-        public async Task<User?> FindById(Guid id)
+        public virtual async Task<User?> FindById(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             return await context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<User?> FindByEmail(string email)
+        public virtual async Task<User?> FindByEmail(string email)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             return await context.Users.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<User?> FindByPhone(string phone)
+        public virtual async Task<User?> FindByPhone(string phone)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             return await context.Users.FirstOrDefaultAsync(u => u.Phone == phone);
         }
 
-        public async Task<User> Create(User user)
+        public virtual async Task<User> Create(User user)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             context.Users.Add(user);
@@ -47,7 +49,7 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return user;
         }
 
-        public async Task<User?> UpdatePassword(string email, string newPassword)
+        public virtual async Task<User?> UpdatePassword(string email, string newPassword)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var found = context.Users.FirstOrDefault(u => u.Email == email);
@@ -62,7 +64,7 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return null;
         }
 
-        public async Task<User?> Delete(string email)
+        public virtual async Task<User?> Delete(string email)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var foundUser = context.Users.FirstOrDefault(u => u.Email == email);

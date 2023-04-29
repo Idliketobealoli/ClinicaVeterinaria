@@ -13,32 +13,32 @@ namespace ClinicaVeterinaria.API.Api.repositories
             ContextFactory = contextFactory;
         }
 
-        public async Task<List<Vet>> FindAll()
+        public virtual async Task<List<Vet>> FindAll()
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var vets = await context.Vets.ToListAsync();
             return vets ?? new();
         }
 
-        public async Task<Vet?> FindById(Guid id)
+        public virtual async Task<Vet?> FindById(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             return await context.Vets.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<Vet?> FindByEmail(string email)
+        public virtual async Task<Vet?> FindByEmail(string email)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             return await context.Vets.FirstOrDefaultAsync(u => u.Email == email);
         }
 
-        public async Task<Vet?> FindBySSNum(string ssnum)
+        public virtual async Task<Vet?> FindBySSNum(string ssnum)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             return await context.Vets.FirstOrDefaultAsync(u => u.SSNumber == ssnum);
         }
 
-        public async Task<Vet> Create(Vet vet)
+        public virtual async Task<Vet> Create(Vet vet)
         {
             using (ClinicaDBContext context = ContextFactory.CreateDbContext())
             {
@@ -48,7 +48,7 @@ namespace ClinicaVeterinaria.API.Api.repositories
             }
         }
 
-        public async Task<Vet?> UpdatePassword(string email, string password)
+        public virtual async Task<Vet?> UpdatePassword(string email, string password)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var foundVet = context.Vets.FirstOrDefault(u => u.Email == email);
@@ -62,7 +62,7 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return null;
         }
 
-        public async Task<Vet?> Delete(string email)
+        public virtual async Task<Vet?> Delete(string email)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var foundVet = context.Vets.FirstOrDefault(u => u.Email == email);

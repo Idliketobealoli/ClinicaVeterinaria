@@ -2,9 +2,9 @@
 {
     public class Either<TSuccess, TError>
     {
-        private readonly TSuccess? _successValue;
-        private readonly TError? _errorValue;
-        private readonly bool _isSuccess;
+        public readonly TSuccess? _successValue;
+        public readonly TError? _errorValue;
+        public readonly bool _isSuccess;
 
         public Either(TSuccess successValue)
         {

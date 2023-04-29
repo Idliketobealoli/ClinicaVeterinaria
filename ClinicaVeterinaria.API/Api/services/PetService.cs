@@ -23,7 +23,7 @@ namespace ClinicaVeterinaria.API.Api.services
             VacRepo = vacRepo;
         }
 
-        public async Task<List<PetDTOshort>> FindAll()
+        public virtual async Task<List<PetDTOshort>> FindAll()
         {
             var pets = await PetRepo.FindAll();
             var petsDTO = new List<PetDTOshort>();
@@ -34,7 +34,7 @@ namespace ClinicaVeterinaria.API.Api.services
             return petsDTO;
         }
 
-        public async Task<Either<PetDTO, DomainError>> FindById(Guid id)
+        public virtual async Task<Either<PetDTO, DomainError>> FindById(Guid id)
         {
             var pet = await PetRepo.FindById(id);
             if (pet == null)
@@ -51,7 +51,7 @@ namespace ClinicaVeterinaria.API.Api.services
             else return new Either<PetDTO, DomainError>(pet.ToDTO(owner));
         }
 
-        public async Task<Either<PetDTOnoPhoto, DomainError>> FindByIdNoPhoto(Guid id)
+        public virtual async Task<Either<PetDTOnoPhoto, DomainError>> FindByIdNoPhoto(Guid id)
         {
             var pet = await PetRepo.FindById(id);
             if (pet == null)
@@ -62,7 +62,7 @@ namespace ClinicaVeterinaria.API.Api.services
             else return new Either<PetDTOnoPhoto, DomainError>(pet.ToDTOnoPhoto());
         }
 
-        public async Task<Either<PetDTO, DomainError>> Create(PetDTOcreate dto)
+        public virtual async Task<Either<PetDTO, DomainError>> Create(PetDTOcreate dto)
         {
             var user = await UserRepo.FindByEmail(dto.OwnerEmail);
             if (user != null)
@@ -81,7 +81,7 @@ namespace ClinicaVeterinaria.API.Api.services
                     (new UserErrorNotFound($"Owner with email {dto.OwnerEmail} not found."));
         }
 
-        public async Task<Either<PetDTO, DomainError>> Update(PetDTOupdate dto)
+        public virtual async Task<Either<PetDTO, DomainError>> Update(PetDTOupdate dto)
         {
             var updated = await PetRepo.Update(dto);
             if (updated != null)
@@ -98,7 +98,7 @@ namespace ClinicaVeterinaria.API.Api.services
                     (new PetErrorNotFound($"Pet with id {dto.Id} not found."));
         }
 
-        public async Task<Either<PetDTO, DomainError>> Delete(Guid id)
+        public virtual async Task<Either<PetDTO, DomainError>> Delete(Guid id)
         {
             // esto primero porque si no despues no se encontrara
             // historial ni vacunas

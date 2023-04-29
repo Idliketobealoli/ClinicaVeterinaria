@@ -14,20 +14,20 @@ namespace ClinicaVeterinaria.API.Api.repositories
             ContextFactory = contextFactory;
         }
 
-        public async Task<List<Pet>> FindAll()
+        public virtual async Task<List<Pet>> FindAll()
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var pets = await context.Pets.ToListAsync();
             return pets ?? new();
         }
 
-        public async Task<Pet?> FindById(Guid id)
+        public virtual async Task<Pet?> FindById(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             return await context.Pets.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<Pet> Create(Pet pet)
+        public virtual async Task<Pet> Create(Pet pet)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             context.Pets.Add(pet);
@@ -36,7 +36,7 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return pet;
         }
 
-        public async Task<Pet?> Update(PetDTOupdate pet)
+        public virtual async Task<Pet?> Update(PetDTOupdate pet)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var found = context.Pets.FirstOrDefault(u => u.Id == pet.Id);
@@ -54,7 +54,7 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return null;
         }
 
-        public async Task<Pet?> Delete(Guid id)
+        public virtual async Task<Pet?> Delete(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var found = context.Pets.FirstOrDefault(u => u.Id == id);

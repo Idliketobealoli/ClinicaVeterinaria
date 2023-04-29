@@ -13,20 +13,20 @@ namespace ClinicaVeterinaria.API.Api.repositories
             ContextFactory = contextFactory;
         }
 
-        public async Task<List<Vaccine>> FindAll()
+        public virtual async Task<List<Vaccine>> FindAll()
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var vaccines = await context.Vaccines.ToListAsync();
             return vaccines ?? new();
         }
 
-        public async Task<Vaccine?> FindById(Guid id)
+        public virtual async Task<Vaccine?> FindById(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             return await context.Vaccines.FirstOrDefaultAsync(u => u.Id == id);
         }
 
-        public async Task<Vaccine> Create(Vaccine vaccines)
+        public virtual async Task<Vaccine> Create(Vaccine vaccines)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             context.Vaccines.Add(vaccines);
@@ -35,7 +35,7 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return vaccines;
         }
 
-        public async Task<Vaccine?> Update(Guid id, Vaccine vaccine)
+        public virtual async Task<Vaccine?> Update(Guid id, Vaccine vaccine)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var found = context.Vaccines.FirstOrDefault(u => u.Id == id);
@@ -50,7 +50,7 @@ namespace ClinicaVeterinaria.API.Api.repositories
             return null;
         }
 
-        public async Task<Vaccine?> Delete(Guid id)
+        public virtual async Task<Vaccine?> Delete(Guid id)
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
             var found = context.Vaccines.FirstOrDefault(u => u.Id == id);
