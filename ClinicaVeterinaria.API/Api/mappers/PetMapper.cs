@@ -10,7 +10,6 @@ namespace ClinicaVeterinaria.API.Api.mappers
             return new
                 (
                 pet.Id,
-                pet.Photo,
                 pet.Name,
                 pet.Race,
                 pet.Species,
@@ -23,7 +22,6 @@ namespace ClinicaVeterinaria.API.Api.mappers
             return new
                 (
                 pet.Id,
-                pet.Photo,
                 pet.Name,
                 pet.Race,
                 pet.Species,
@@ -33,17 +31,6 @@ namespace ClinicaVeterinaria.API.Api.mappers
                 pet.Size,
                 pet.History.ToDTO(),
                 owner.ToDTOshort()
-                );
-        }
-
-        public static PetDTOnoPhoto ToDTOnoPhoto(this Pet pet)
-        {
-            return new
-                (
-                pet.Name,
-                pet.Race,
-                pet.Species,
-                pet.Sex
                 );
         }
 
@@ -59,8 +46,7 @@ namespace ClinicaVeterinaria.API.Api.mappers
                 dto.Size,
                 dto.Sex,
                 dto.Date,
-                dto.OwnerEmail,
-                dto.Photo
+                dto.OwnerEmail
                 );
         }
     }

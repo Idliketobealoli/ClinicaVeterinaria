@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ClinicaVeterinaria.API.Migrations
 {
     [DbContext(typeof(ClinicaDBContext))]
-    [Migration("20230423165007_Initial")]
+    [Migration("20230429183317_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -21,7 +21,7 @@ namespace ClinicaVeterinaria.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresExtension(modelBuilder, "hstore");
@@ -97,10 +97,6 @@ namespace ClinicaVeterinaria.API.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("OwnerEmail")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Photo")
                         .IsRequired()
                         .HasColumnType("text");
 

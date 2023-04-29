@@ -45,21 +45,6 @@ namespace ClinicaVeterinaria.API.Api.controllers
         }
 
         [UseDbContext(typeof(ClinicaDBContext))]
-        public Result FindPetByIdNoPhoto(Guid id)
-        {
-            Stopwatch.StartNew();
-            var task = Service.FindByIdNoPhoto(id);
-            task.Wait();
-            var time = Stopwatch.GetTimestamp();
-
-            return task.Result.Match
-                (
-                onSuccess: x => new Result(200, JsonSerializer.Serialize(x), time),
-                onError: x => new Result(x.Code, x.Message, time)
-                );
-        }
-
-        [UseDbContext(typeof(ClinicaDBContext))]
         public Result CreatePet(PetDTOcreate dto)
         {
             Stopwatch.StartNew();

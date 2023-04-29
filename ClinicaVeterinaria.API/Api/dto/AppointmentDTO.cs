@@ -7,7 +7,7 @@ namespace ClinicaVeterinaria.API.Api.dto
         public UserDTOshort User { get; set; }
         public DateTime InitialDate { get; set; }
         public DateTime FinishDate { get; set; }
-        public PetDTOnoPhoto Pet { get; set; }
+        public PetDTOshort Pet { get; set; }
         public string Issue { get; set; }
         public State State { get; set; }
         public VetDTOappointment Vet { get; set; }
@@ -17,7 +17,7 @@ namespace ClinicaVeterinaria.API.Api.dto
             UserDTOshort user,
             DateTime initial,
             DateTime finish,
-            PetDTOnoPhoto pet,
+            PetDTOshort pet,
             string issue,
             State state,
             VetDTOappointment vet
@@ -37,13 +37,13 @@ namespace ClinicaVeterinaria.API.Api.dto
     {
         public Guid Id { get; set; }
         public DateTime InitialDate { get; set; }
-        public PetDTOnoPhoto Pet { get; set; }
+        public PetDTOshort Pet { get; set; }
 
         public AppointmentDTOshort
             (
             Guid id,
             DateTime initial,
-            PetDTOnoPhoto pet
+            PetDTOshort pet
             )
         {
             Id = id;

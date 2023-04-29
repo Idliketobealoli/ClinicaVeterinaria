@@ -47,7 +47,6 @@ namespace ClinicaVeterinaria.API.Api.repositories
                 found.Name = pet.Name ?? found.Name;
                 found.Weight = pet.Weight ?? found.Weight;
                 found.Size = pet.Size ?? found.Size;
-                found.Photo = pet.Photo ?? found.Photo;
                 context.Pets.Update(found);
                 await context.SaveChangesAsync();
 

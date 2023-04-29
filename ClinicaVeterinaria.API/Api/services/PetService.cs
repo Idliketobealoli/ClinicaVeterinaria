@@ -48,20 +48,9 @@ namespace ClinicaVeterinaria.API.Api.services
             if (owner == null)
             {
                 return new Either<PetDTO, DomainError>
-                    (new UserErrorNotFound($"User with id {id} not found."));
+                    (new UserErrorNotFound($"User with email {pet.OwnerEmail} not found."));
             }
             else return new Either<PetDTO, DomainError>(pet.ToDTO(owner));
-        }
-
-        public virtual async Task<Either<PetDTOnoPhoto, DomainError>> FindByIdNoPhoto(Guid id)
-        {
-            var pet = await PetRepo.FindById(id);
-            if (pet == null)
-            {
-                return new Either<PetDTOnoPhoto, DomainError>
-                    (new PetErrorNotFound($"Pet with id {id} not found."));
-            }
-            else return new Either<PetDTOnoPhoto, DomainError>(pet.ToDTOnoPhoto());
         }
 
         public virtual async Task<Either<PetDTO, DomainError>> Create(PetDTOcreate dto)

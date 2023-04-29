@@ -45,8 +45,7 @@ namespace ClinicaVeterinaria.API.Migrations
                     Size = table.Column<double>(type: "double precision", nullable: false),
                     Sex = table.Column<int>(type: "integer", nullable: false),
                     BirthDate = table.Column<DateOnly>(type: "date", nullable: false),
-                    OwnerEmail = table.Column<string>(type: "text", nullable: false),
-                    Photo = table.Column<string>(type: "text", nullable: false)
+                    OwnerEmail = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

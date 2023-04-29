@@ -16,7 +16,7 @@ namespace ClinicaVeterinaria.API.Api.mappers
                 user.ToDTOshort(),
                 appointment.InitialDate,
                 appointment.FinishDate,
-                pet.ToDTOnoPhoto(),
+                pet.ToDTOshort(),
                 appointment.Issue,
                 appointment.State,
                 vet.ToDTOappointment()
@@ -32,7 +32,7 @@ namespace ClinicaVeterinaria.API.Api.mappers
                 (
                 appointment.Id,
                 appointment.InitialDate,
-                pet.ToDTOnoPhoto()
+                pet.ToDTOshort()
                 );
         }
     }

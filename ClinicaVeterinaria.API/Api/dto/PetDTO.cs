@@ -6,12 +6,11 @@ namespace ClinicaVeterinaria.API.Api.dto
     {
         public PetDTOshort
             (
-            Guid id, string photo, string name,
+            Guid id, string name,
             string race, string species, Sex sex
             )
         {
             Id = id;
-            Photo = photo;
             Name = name;
             Race = race;
             Species = species;
@@ -19,7 +18,6 @@ namespace ClinicaVeterinaria.API.Api.dto
         }
 
         public Guid Id { get; set; }
-        public string Photo { get; set; }
         public string Name { get; set; }
         public string Race { get; set; }
         public string Species { get; set; }
@@ -30,14 +28,13 @@ namespace ClinicaVeterinaria.API.Api.dto
     {
         public PetDTO
             (
-            Guid id, string photo, string name,
+            Guid id, string name,
             string race, string species, Sex sex,
             DateOnly birthDate, double weight, double size,
             HistoryDTO history,UserDTOshort ownerDto
             )
         {
             Id = id;
-            Photo = photo;
             Name = name;
             Race = race;
             Species = species;
@@ -50,7 +47,6 @@ namespace ClinicaVeterinaria.API.Api.dto
         }
 
         public Guid Id { get; set; }
-        public string Photo { get; set; }
         public string Name { get; set; }
         public string Race { get; set; }
         public string Species { get; set; }
@@ -60,22 +56,6 @@ namespace ClinicaVeterinaria.API.Api.dto
         public double Size { get; set; }
         public HistoryDTO History { get; set; }
         public UserDTOshort OwnerDTO { get; set; }
-    }
-
-    public class PetDTOnoPhoto
-    {
-        public string Name { get; set; }
-        public string Race { get; set; }
-        public string Species { get; set; }
-        public Sex Sex { get; set; }
-
-        public PetDTOnoPhoto(string name, string race, string species, Sex sex)
-        {
-            Name = name;
-            Race = race;
-            Species = species;
-            Sex = sex;
-        }
     }
 
     public class PetDTOcreate
@@ -88,12 +68,11 @@ namespace ClinicaVeterinaria.API.Api.dto
         public Sex Sex { get; set; }
         public DateOnly Date { get; set; }
         public string OwnerEmail { get; set; }
-        public string Photo { get; set; }
 
         public PetDTOcreate(
             string name, string species, string race,
             double weight, double size, Sex sex,
-            DateOnly date, string ownerEmail, string photo
+            DateOnly date, string ownerEmail
             )
         {
             Name = name;
@@ -104,7 +83,6 @@ namespace ClinicaVeterinaria.API.Api.dto
             Sex = sex;
             Date = date;
             OwnerEmail = ownerEmail;
-            Photo = photo;
         }
     }
 
@@ -114,18 +92,16 @@ namespace ClinicaVeterinaria.API.Api.dto
         public string? Name { get; set; }
         public double? Weight { get; set; }
         public double? Size { get; set; }
-        public string? Photo { get; set; }
 
         public PetDTOupdate(
             Guid id, string? name, double? weight,
-            double? size, string? photo
+            double? size
             )
         {
             Id = id;
             Name = name;
             Weight = weight;
             Size = size;
-            Photo = photo;
         }
     }
 }

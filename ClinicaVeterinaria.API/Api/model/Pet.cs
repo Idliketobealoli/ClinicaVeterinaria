@@ -6,7 +6,7 @@ namespace ClinicaVeterinaria.API.Api.model
             (
             Guid id, string name, string species, string race,
             double weight, double size, Sex sex, DateOnly birthDate,
-            string ownerEmail, string photo
+            string ownerEmail
             )
         {
             Id = id;
@@ -19,7 +19,6 @@ namespace ClinicaVeterinaria.API.Api.model
             BirthDate = birthDate;
             OwnerEmail = ownerEmail;
             History = new History(id);
-            Photo = photo;
         }
 
         [GraphQLNonNullType]
@@ -42,8 +41,6 @@ namespace ClinicaVeterinaria.API.Api.model
         public string OwnerEmail { get; set; }
         [GraphQLNonNullType]
         public History History { get; set; }
-        [GraphQLNonNullType]
-        public string Photo { get; set; }
     }
 
     public enum Sex
