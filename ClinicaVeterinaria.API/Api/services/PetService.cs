@@ -23,6 +23,8 @@ namespace ClinicaVeterinaria.API.Api.services
             VacRepo = vacRepo;
         }
 
+        public PetService() { }
+
         public virtual async Task<List<PetDTOshort>> FindAll()
         {
             var pets = await PetRepo.FindAll();

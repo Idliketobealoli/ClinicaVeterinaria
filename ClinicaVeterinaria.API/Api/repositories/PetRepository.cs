@@ -14,6 +14,8 @@ namespace ClinicaVeterinaria.API.Api.repositories
             ContextFactory = contextFactory;
         }
 
+        public PetRepository() { }
+
         public virtual async Task<List<Pet>> FindAll()
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();

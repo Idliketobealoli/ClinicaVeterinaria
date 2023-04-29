@@ -8,6 +8,8 @@ namespace ClinicaVeterinaria.API.Api.repositories
     {
         private readonly IDbContextFactory<ClinicaDBContext> ContextFactory;
 
+        public VetRepository() { }
+
         public VetRepository(IDbContextFactory<ClinicaDBContext> contextFactory)
         {
             ContextFactory = contextFactory;

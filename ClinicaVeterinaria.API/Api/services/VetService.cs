@@ -14,6 +14,8 @@ namespace ClinicaVeterinaria.API.Api.services
             Repo = repo;
         }
 
+        public VetService() { }
+
         public virtual async Task<List<VetDTO>> FindAll()
         {
             var entities = await Repo.FindAll();
@@ -63,7 +65,7 @@ namespace ClinicaVeterinaria.API.Api.services
             var userByEmail = Repo.FindByEmail(dto.Email);
             var userBySSNumber = Repo.FindBySSNum(dto.SSNumber);
             Task.WaitAll(userByEmail, userBySSNumber);
-            if (userBySSNumber != null || userByEmail != null)
+            if (userBySSNumber.Result != null || userByEmail.Result != null)
             {
                 return new Either<VetDTOandToken, DomainError>
                     (new VetErrorUnauthorized("Cannot use either that email or that Social Security number."));

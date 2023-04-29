@@ -14,6 +14,8 @@ namespace ClinicaVeterinaria.API.Api.services
             Repo = repo;
         }
 
+        public UserService() { }
+
         public virtual async Task<List<UserDTO>> FindAll()
         {
             var entities = await Repo.FindAll();

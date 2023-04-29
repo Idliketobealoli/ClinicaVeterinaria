@@ -85,12 +85,12 @@
     public class UserDTOandToken
     {
         public UserDTO DTO { get; set; }
-        public string token { get; set; }
+        public string Token { get; set; }
 
         public UserDTOandToken(UserDTO dTO, string token)
         {
             DTO = dTO;
-            this.token = token;
+            Token = token;
         }
     }
  }

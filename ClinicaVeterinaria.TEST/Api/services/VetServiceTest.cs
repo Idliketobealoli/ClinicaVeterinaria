@@ -1,4 +1,4 @@
-using ClinicaVeterinaria.API.Api.dto;
+﻿using ClinicaVeterinaria.API.Api.dto;
 using ClinicaVeterinaria.API.Api.errors;
 using ClinicaVeterinaria.API.Api.model;
 using ClinicaVeterinaria.API.Api.repositories;
@@ -8,38 +8,43 @@ using Moq;
 namespace ClinicaVeterinaria.TEST.Api.services
 {
     [TestClass]
-    public class UserServiceTest
+    public class VetServiceTest
     {
-        private Mock<UserRepository> Repo;
-        private UserService Service;
-        private List<User> List;
-        private List<UserDTO> ListDTO;
-        private User Entity;
-        private UserDTO DTO;
-        private UserDTOshort DTOShort;
-        private UserDTOandToken DTOandToken;
-        private UserDTOregister DTOregister;
-        private UserDTOloginOrChangePassword DTOupdate;
-        private UserDTOloginOrChangePassword DTOlogin;
+        private Mock<VetRepository> Repo;
+        private VetService Service;
+        private List<Vet> List;
+        private List<VetDTO> ListDTO;
+        private Vet Entity;
+        private VetDTO DTO;
+        private VetDTOshort DTOShort;
+        private VetDTOappointment DTOappointment;
+        private VetDTOandToken DTOandToken;
+        private VetDTOregister DTOregister;
+        private VetDTOloginOrChangePassword DTOupdate;
+        private VetDTOloginOrChangePassword DTOlogin;
 
         [TestInitialize]
         public void Init()
         {
-            Repo = new Mock<UserRepository>();
+            Repo = new Mock<VetRepository>();
             Service = new(Repo.Object);
             Entity = new(
                 "test", "testeado", "uwu@gmail.com",
-                "123456789", "uwu1234");
+                "123456789", "uwu1234", Role.VET, "qwerty");
             DTO = new(
-                "test", "testeado", "uwu@gmail.com", "123456789");
+                "test", "testeado", "uwu@gmail.com",
+                "123456789", Role.VET, "qwerty");
             DTOShort = new("test", "testeado");
             DTOandToken = new(DTO, "token");
-            List = new List<User>() { Entity };
-            ListDTO = new List<UserDTO>() { DTO };
+            List = new List<Vet>() { Entity };
+            ListDTO = new List<VetDTO>() { DTO };
             DTOregister = new(
-                "test", "testeado2", "email2@gmail.com", "987654321", "uwu1234", "uwu1234");
+                "test", "testeado2", "email2@gmail.com",
+                "987654321", "uwu1234", "uwu1234",
+                Role.VET, "qwerty");
             DTOupdate = new("uwu@gmail.com", "1234uwu");
             DTOlogin = new("uwu@gmail.com", "uwu1234");
+            DTOappointment = new("test", "testeado2", "email2@gmail.com");
         }
 
         [TestMethod]
@@ -95,7 +100,7 @@ namespace ClinicaVeterinaria.TEST.Api.services
             Assert.IsNull(res.Result._successValue);
             Assert.IsNotNull(res.Result._errorValue);
             Assert.AreEqual
-                (new UserErrorNotFound($"User with Email uwu@gmail.com not found.").Message,
+                (new VetErrorNotFound($"Vet with email uwu@gmail.com not found.").Message,
                 res.Result._errorValue.Message);
         }
 
@@ -125,7 +130,37 @@ namespace ClinicaVeterinaria.TEST.Api.services
             Assert.IsNull(res.Result._successValue);
             Assert.IsNotNull(res.Result._errorValue);
             Assert.AreEqual(
-                new UserErrorNotFound($"User with Email uwu@gmail.com not found.").Message,
+                new VetErrorNotFound($"Vet with email uwu@gmail.com not found.").Message,
+                res.Result._errorValue.Message);
+        }
+
+        [TestMethod]
+        public void FindByEmailAppointmentOk()
+        {
+            Repo.Setup(x => x.FindByEmail(It.IsAny<string>())).ReturnsAsync(Entity, new TimeSpan(100));
+
+            var res = Service.FindByEmailAppointment("uwu@gmail.com");
+            res.Wait();
+
+            Assert.IsTrue(res.Result._isSuccess);
+            Assert.IsNotNull(res.Result._successValue);
+            Assert.IsNull(res.Result._errorValue);
+            Assert.AreEqual(DTOappointment.Name, res.Result._successValue.Name);
+        }
+
+        [TestMethod]
+        public void FindByEmailAppointmentNF()
+        {
+            Repo.Setup(x => x.FindByEmail(It.IsAny<string>())).ReturnsAsync(null, new TimeSpan(100));
+
+            var res = Service.FindByEmailAppointment("uwu@gmail.com");
+            res.Wait();
+
+            Assert.IsFalse(res.Result._isSuccess);
+            Assert.IsNull(res.Result._successValue);
+            Assert.IsNotNull(res.Result._errorValue);
+            Assert.AreEqual(
+                new VetErrorNotFound($"Vet with email uwu@gmail.com not found.").Message,
                 res.Result._errorValue.Message);
         }
 
@@ -133,8 +168,8 @@ namespace ClinicaVeterinaria.TEST.Api.services
         public void RegisterOk()
         {
             Repo.Setup(x => x.FindByEmail(It.IsAny<string>())).ReturnsAsync(null, new TimeSpan(100));
-            Repo.Setup(x => x.FindByPhone(It.IsAny<string>())).ReturnsAsync(null, new TimeSpan(100));
-            Repo.Setup(x => x.Create(It.IsAny<User>())).ReturnsAsync(Entity, new TimeSpan(100));
+            Repo.Setup(x => x.FindBySSNum(It.IsAny<string>())).ReturnsAsync(null, new TimeSpan(100));
+            Repo.Setup(x => x.Create(It.IsAny<Vet>())).ReturnsAsync(Entity, new TimeSpan(100));
 
             var res = Service.Register(DTOregister);
             res.Wait();
@@ -149,7 +184,7 @@ namespace ClinicaVeterinaria.TEST.Api.services
         public void RegisterError()
         {
             Repo.Setup(x => x.FindByEmail(It.IsAny<string>())).ReturnsAsync(Entity, new TimeSpan(100));
-            Repo.Setup(x => x.FindByPhone(It.IsAny<string>())).ReturnsAsync(Entity, new TimeSpan(100));
+            Repo.Setup(x => x.FindBySSNum(It.IsAny<string>())).ReturnsAsync(Entity, new TimeSpan(100));
 
             var res = Service.Register(DTOregister);
             res.Wait();
@@ -158,7 +193,7 @@ namespace ClinicaVeterinaria.TEST.Api.services
             Assert.IsNull(res.Result._successValue);
             Assert.IsNotNull(res.Result._errorValue);
             Assert.AreEqual(
-                new UserErrorUnauthorized("Cannot use either that email or that phone number.").Message,
+                new VetErrorUnauthorized("Cannot use either that email or that Social Security number.").Message,
                 res.Result._errorValue.Message);
         }
 
@@ -188,7 +223,7 @@ namespace ClinicaVeterinaria.TEST.Api.services
             Assert.IsNull(res.Result._successValue);
             Assert.IsNotNull(res.Result._errorValue);
             Assert.AreEqual(
-                new UserErrorUnauthorized("Incorrect email or password.").Message,
+                new VetErrorUnauthorized("Incorrect email or password.").Message,
                 res.Result._errorValue.Message);
         }
 
@@ -218,7 +253,7 @@ namespace ClinicaVeterinaria.TEST.Api.services
             Assert.IsNull(res.Result._successValue);
             Assert.IsNotNull(res.Result._errorValue);
             Assert.AreEqual(
-                new UserErrorNotFound($"User with email {DTOupdate.Email} not found.").Message,
+                new VetErrorNotFound($"Vet with email {DTOupdate.Email} not found.").Message,
                 res.Result._errorValue.Message);
         }
 
@@ -248,7 +283,7 @@ namespace ClinicaVeterinaria.TEST.Api.services
             Assert.IsNull(res.Result._successValue);
             Assert.IsNotNull(res.Result._errorValue);
             Assert.AreEqual(
-                new UserErrorNotFound($"User with email uwu@gmail.com not found.").Message,
+                new VetErrorNotFound($"Vet with email uwu@gmail.com not found.").Message,
                 res.Result._errorValue.Message);
         }
     }

@@ -16,6 +16,8 @@ namespace ClinicaVeterinaria.API.Api.services
             VacRepo = vacRepo;
         }
 
+        public HistoryService() { }
+
         public virtual async Task<List<HistoryDTO>> FindAll()
         {
             var entities = await HisRepo.FindAll();

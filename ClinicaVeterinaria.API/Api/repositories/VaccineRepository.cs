@@ -13,6 +13,8 @@ namespace ClinicaVeterinaria.API.Api.repositories
             ContextFactory = contextFactory;
         }
 
+        public VaccineRepository() { }
+
         public virtual async Task<List<Vaccine>> FindAll()
         {
             using ClinicaDBContext context = ContextFactory.CreateDbContext();
