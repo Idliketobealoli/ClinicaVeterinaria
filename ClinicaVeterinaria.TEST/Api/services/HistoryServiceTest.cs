@@ -14,13 +14,11 @@ namespace ClinicaVeterinaria.TEST.Api.services
         private Mock<VaccineRepository> VaccineRepo;
         private HistoryService Service;
         private List<History> ListHistory;
-        private List<Vaccine> ListVaccine;
         private List<HistoryDTO> ListDTO;
         private HashSet<VaccineDTO> VaccinesSet;
         private Dictionary<string, string> ailmentTreatment;
         private VaccineDTO Vaccine;
         private History EntityHistory;
-        private Vaccine EntityVaccine;
         private HistoryDTO DTO;
         private string problema = "Diabetes";
         private string tratamiento = "Inyecciones de insulina";
@@ -33,14 +31,12 @@ namespace ClinicaVeterinaria.TEST.Api.services
             Service = new(HistoryRepo.Object, VaccineRepo.Object);
             EntityHistory = new(
                 Guid.Parse("d24e89f2-c97a-4e0d-ab07-f392a8ea5fd4"));
-            EntityVaccine = new(Guid.NewGuid(), "Insulina", DateOnly.FromDateTime(DateTime.Today));
             Vaccine = new("Vacuna1", DateOnly.FromDateTime(DateTime.Now));
             VaccinesSet = new HashSet<VaccineDTO>() { Vaccine };
             ailmentTreatment = new Dictionary<string, string>() { { problema, tratamiento } };
             DTO = new(
                 Guid.Parse("d24e89f2-c97a-4e0d-ab07-f392a8ea5fd4"), VaccinesSet, ailmentTreatment);
             ListHistory = new List<History>() { EntityHistory };
-            ListVaccine = new List<Vaccine>() { EntityVaccine };
             ListDTO = new List<HistoryDTO>() { DTO };
         }
 
@@ -48,7 +44,6 @@ namespace ClinicaVeterinaria.TEST.Api.services
         public void FindAllOk()
         {
             HistoryRepo.Setup(x => x.FindAll()).ReturnsAsync(ListHistory, new TimeSpan(100));
-            VaccineRepo.Setup(x => x.FindAll()).ReturnsAsync(ListVaccine, new TimeSpan(100));
 
             var res = Service.FindAll();
             res.Wait();
@@ -62,7 +57,6 @@ namespace ClinicaVeterinaria.TEST.Api.services
         public void FindAllNF()
         {
             HistoryRepo.Setup(x => x.FindAll()).ReturnsAsync(new(), new TimeSpan(100));
-            VaccineRepo.Setup(x => x.FindAll()).ReturnsAsync(new(), new TimeSpan(100));
 
             var res = Service.FindAll();
             res.Wait();
